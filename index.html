@@ -301,8 +301,73 @@
   .two-col{ display:grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   @media (max-width: 900px){
     .kpis{ grid-template-columns: repeat(2, 1fr); }
+    .annual-kpis{ grid-template-columns: repeat(2, 1fr) !important; }
     .breakdown, .two-col{ grid-template-columns: 1fr; }
   }
+
+  /* ANNUAL VIEW */
+  .annual-section{
+    background: linear-gradient(135deg, var(--surface) 0%, #0a0a0a 100%);
+    border: 1px solid var(--line);
+    border-radius: var(--r-xl);
+    padding: 24px 26px;
+    margin-bottom: 28px;
+    position: relative; overflow: hidden;
+  }
+  .annual-section::before{
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--lime) 0%, var(--lime-dim) 50%, transparent 100%);
+  }
+  .annual-header{
+    display:flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .annual-header-left{ display:flex; align-items: baseline; gap: 12px; }
+  .annual-header h2{
+    font-family: var(--font-body); font-weight: 700; font-size: 18px;
+    letter-spacing: -0.012em;
+  }
+  .annual-header h2 .accent{ color: var(--lime); }
+  .annual-meta{
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .annual-kpis{
+    display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  }
+  .annual-kpi{
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: 16px 18px;
+  }
+  .annual-kpi.highlight{
+    background: var(--lime-soft);
+    border-color: var(--lime-soft-strong);
+  }
+  .annual-kpi .a-label{
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-3); margin-bottom: 10px; font-weight: 500;
+  }
+  .annual-kpi.highlight .a-label{ color: var(--lime); }
+  .annual-kpi .a-value{
+    font-family: var(--font-display); font-weight: 800;
+    font-size: 26px; letter-spacing: -0.02em; line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .annual-kpi.highlight .a-value{ color: var(--lime); }
+  .annual-kpi.negative .a-value{ color: var(--red); }
+  .annual-kpi .a-currency{
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--text-3); margin-left: 4px; font-weight: 400;
+  }
+  .annual-kpi .a-usd{
+    margin-top: 6px;
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--text-3); letter-spacing: 0.02em;
+  }
+  .annual-kpi.highlight .a-usd{ color: rgba(204,255,0,.7); }
 
   /* EMPTY STATE */
   .empty-state{
@@ -349,6 +414,18 @@
   <div class="eyebrow">CONTABILIDAD · VISTA MENSUAL</div>
   <h1>El pulso del <span class="accent">negocio</span>.</h1>
   <p id="subtitle">Ingresos, egresos y saldo en tiempo real. Datos cargados desde Claude Cowork.</p>
+</div>
+
+<!-- ANNUAL VIEW · SALDO ACUMULADO -->
+<div class="annual-section">
+  <div class="annual-header">
+    <div class="annual-header-left">
+      <span class="eyebrow">VISTA ANUAL</span>
+      <h2>Año fiscal <span class="accent" id="annualYear">2026</span></h2>
+    </div>
+    <span class="annual-meta" id="annualMeta">— meses con datos</span>
+  </div>
+  <div class="annual-kpis" id="annualKpis"></div>
 </div>
 
 <!-- MONTH SELECTOR -->
@@ -526,6 +603,51 @@ function monthTotals(mes){
 function hasData(mes){
   const d = DATA.meses[mes];
   return d && (d.ingresos.length > 0 || d.egresos.length > 0);
+}
+
+/* ANNUAL VIEW · acumulado del año */
+function renderAnnualView(){
+  let totalIng = 0, totalEgr = 0, monthsWithData = 0, bestMonth = null, bestSaldo = -Infinity;
+  MESES_ORDER.forEach(mes => {
+    const t = monthTotals(mes);
+    if (hasData(mes)){
+      totalIng += t.ingresos;
+      totalEgr += t.egresos;
+      monthsWithData++;
+      if (t.saldo > bestSaldo){ bestSaldo = t.saldo; bestMonth = mes; }
+    }
+  });
+  const saldo = totalIng - totalEgr;
+  const margen = totalIng > 0 ? (saldo / totalIng) * 100 : 0;
+
+  document.getElementById("annualYear").textContent = DATA.ano_activo;
+  document.getElementById("annualMeta").textContent =
+    monthsWithData + (monthsWithData === 1 ? " mes con datos" : " meses con datos") +
+    (bestMonth ? " · MEJOR MES: " + MESES_SHORT[bestMonth] : "");
+
+  const cont = document.getElementById("annualKpis");
+  cont.innerHTML = `
+    <div class="annual-kpi">
+      <div class="a-label">INGRESOS YTD</div>
+      <div class="a-value" style="color: var(--lime);">${fmt(totalIng)}<span class="a-currency">MXN</span></div>
+      <div class="a-usd">${fmtUSD(totalIng)}</div>
+    </div>
+    <div class="annual-kpi">
+      <div class="a-label">EGRESOS YTD</div>
+      <div class="a-value" style="color: var(--red);">${fmt(totalEgr)}<span class="a-currency">MXN</span></div>
+      <div class="a-usd">${fmtUSD(totalEgr)}</div>
+    </div>
+    <div class="annual-kpi highlight ${saldo < 0 ? 'negative' : ''}">
+      <div class="a-label">SALDO ACUMULADO</div>
+      <div class="a-value">${saldo >= 0 ? fmt(saldo) : '(' + fmt(Math.abs(saldo)) + ')'}<span class="a-currency">MXN</span></div>
+      <div class="a-usd">${fmtUSD(saldo)}</div>
+    </div>
+    <div class="annual-kpi ${margen < 0 ? 'negative' : ''}">
+      <div class="a-label">MARGEN ANUAL</div>
+      <div class="a-value" style="${margen >= 20 ? 'color: var(--lime);' : (margen < 0 ? 'color: var(--red);' : '')}">${margen.toFixed(1)}<span class="a-currency">%</span></div>
+      <div class="a-usd">${margen >= 30 ? "Excelente" : margen >= 20 ? "Muy bueno" : margen >= 10 ? "Saludable" : margen >= 0 ? "Apretado" : "En pérdida"}</div>
+    </div>
+  `;
 }
 
 /* MONTH SELECTOR */
@@ -767,6 +889,7 @@ function renderAll(){
     "Mes activo: " + activeMonth.charAt(0).toUpperCase() + activeMonth.slice(1) + " " + DATA.ano_activo +
     " · Moneda: " + DATA.moneda +
     " · USD ≈ $" + DATA.tipo_cambio_mxn_usd.toFixed(2) + " MXN";
+  renderAnnualView();
   renderMonthSelector();
   renderKPIs();
   renderChart();
