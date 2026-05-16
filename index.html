@@ -492,41 +492,43 @@
     .title-row h1{ font-size: 22px; line-height: 1.15; }
     .title-row p{ font-size: 12px; margin-top: 8px; }
 
-    /* ANNUAL SECTION — números enteros, compacto */
+    /* ANNUAL SECTION — IDÉNTICO a KPIs mensuales en móvil
+       (uso !important porque CSS desktop está más abajo y pisa) */
     .annual-section{
-      padding: 16px 12px 18px;
-      margin-bottom: 24px;
-      border-radius: var(--r-lg);
+      padding: 16px 12px 18px !important;
+      margin-bottom: 24px !important;
+      border-radius: var(--r-lg) !important;
     }
     .annual-header{
-      flex-direction: column; align-items: flex-start;
-      gap: 4px; margin-bottom: 14px;
+      flex-direction: column !important; align-items: flex-start !important;
+      gap: 4px !important; margin-bottom: 14px !important;
     }
-    .annual-header-left{ gap: 6px; align-items: baseline; flex-wrap: wrap; }
-    .annual-header h2{ font-size: 15px; letter-spacing: -0.01em; }
-    .annual-meta{ font-size: 8px; letter-spacing: 0.1em; line-height: 1.4; }
+    .annual-header-left{ gap: 6px !important; align-items: baseline !important; flex-wrap: wrap !important; }
+    .annual-header h2{ font-size: 15px !important; letter-spacing: -0.01em !important; }
+    .annual-meta{ font-size: 8px !important; letter-spacing: 0.1em !important; line-height: 1.4 !important; }
 
-    /* KPIs anuales: número entero — font reducido para que quepa */
-    .annual-kpis{ gap: 8px !important; }
+    /* KPIs anuales — MISMO tamaño exacto que .kpi del mes activo */
+    .annual-kpis{ gap: 10px !important; }
     .annual-kpi{
-      padding: 12px 12px; min-width: 0; overflow: hidden;
-      border-radius: var(--r-sm);
+      padding: 14px 14px !important;
+      min-width: 0 !important; overflow: hidden !important;
+      border-radius: var(--r-sm) !important;
     }
     .annual-kpi .a-label{
-      font-size: 8.5px; letter-spacing: 0.08em;
-      margin-bottom: 8px;
+      font-size: 9px !important; letter-spacing: 0.08em !important;
+      margin-bottom: 8px !important;
     }
     .annual-kpi .a-value{
-      font-size: 15px; letter-spacing: -0.02em;
-      line-height: 1; white-space: nowrap;
+      font-size: 17px !important; letter-spacing: -0.02em !important;
+      line-height: 1 !important; white-space: nowrap !important;
     }
     .annual-kpi .a-currency{
-      font-size: 8px; margin-left: 3px; font-weight: 400;
+      font-size: 9px !important; margin-left: 3px !important; font-weight: 400 !important;
     }
     .annual-kpi .a-usd{
-      font-size: 9px; margin-top: 6px;
-      white-space: nowrap; overflow: hidden;
-      letter-spacing: 0.02em;
+      font-size: 9px !important; margin-top: 6px !important;
+      white-space: nowrap !important; overflow: hidden !important;
+      letter-spacing: 0.02em !important;
     }
 
     /* SECTION DIVIDER stack */
@@ -548,13 +550,13 @@
     }
 
     /* KPIS del mes — número entero, font reducido */
-    .kpis{ grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
-    .kpi{ padding: 14px 14px; }
-    .kpi .label{ font-size: 9px; letter-spacing: 0.08em; margin-bottom: 8px; }
-    .kpi .value{ font-size: 17px; letter-spacing: -0.02em; white-space: nowrap; }
-    .kpi .currency{ font-size: 9px; margin-left: 3px; }
-    .kpi .sub{ font-size: 9px; margin-top: 8px; }
-    .kpi .usd-conv{ font-size: 9px; margin-top: 4px; }
+    .kpis{ grid-template-columns: 1fr 1fr !important; gap: 10px !important; margin-bottom: 24px !important; }
+    .kpi{ padding: 14px 14px !important; }
+    .kpi .label{ font-size: 9px !important; letter-spacing: 0.08em !important; margin-bottom: 8px !important; }
+    .kpi .value{ font-size: 17px !important; letter-spacing: -0.02em !important; white-space: nowrap !important; }
+    .kpi .currency{ font-size: 9px !important; margin-left: 3px !important; }
+    .kpi .sub{ font-size: 9px !important; margin-top: 8px !important; }
+    .kpi .usd-conv{ font-size: 9px !important; margin-top: 4px !important; }
 
     /* CARDS */
     .card{ padding: 18px 16px; margin-bottom: 16px; border-radius: var(--r-lg); }
