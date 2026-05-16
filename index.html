@@ -486,19 +486,36 @@
 
     /* ANNUAL SECTION compacta */
     .annual-section{
-      padding: 20px 18px 22px; margin-bottom: 24px;
-      border-radius: var(--r-xl);
+      padding: 18px 14px 18px;
+      margin-bottom: 24px;
+      border-radius: var(--r-lg);
     }
-    .annual-header{ flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 14px; }
-    .annual-header-left{ gap: 8px; align-items: baseline; flex-wrap: wrap; }
-    .annual-header h2{ font-size: 16px; }
-    .annual-meta{ font-size: 9px; letter-spacing: 0.08em; }
-    .annual-kpis{ gap: 10px !important; }
-    .annual-kpi{ padding: 12px 14px; }
-    .annual-kpi .a-label{ font-size: 9px; margin-bottom: 8px; }
-    .annual-kpi .a-value{ font-size: 22px; letter-spacing: -0.025em; }
-    .annual-kpi .a-currency{ font-size: 10px; }
-    .annual-kpi .a-usd{ font-size: 9px; }
+    .annual-header{
+      flex-direction: column; align-items: flex-start;
+      gap: 4px; margin-bottom: 14px;
+    }
+    .annual-header-left{ gap: 6px; align-items: baseline; flex-wrap: wrap; }
+    .annual-header h2{ font-size: 15px; letter-spacing: -0.01em; }
+    .annual-meta{ font-size: 8px; letter-spacing: 0.1em; line-height: 1.4; }
+    .annual-kpis{ gap: 8px !important; }
+    .annual-kpi{
+      padding: 12px 10px; min-width: 0; overflow: hidden;
+      border-radius: var(--r-sm);
+    }
+    .annual-kpi .a-label{
+      font-size: 8px; margin-bottom: 6px;
+      letter-spacing: 0.08em;
+    }
+    .annual-kpi .a-value{
+      font-size: 17px; letter-spacing: -0.025em;
+      line-height: 1.05; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .annual-kpi .a-currency{ font-size: 8px; margin-left: 2px; }
+    .annual-kpi .a-usd{
+      font-size: 8.5px; margin-top: 4px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
 
     /* SECTION DIVIDER stack */
     .section-divider{ margin-bottom: 16px; gap: 10px; }
@@ -907,6 +924,19 @@ const fmt = (n) => {
 };
 const fmtFull = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+/* Compacto para móvil: $103,123 → $103k, $1,234,567 → $1.2M */
+const fmtCompact = (n) => {
+  if (n === 0 || n == null) return "$0";
+  const abs = Math.abs(n);
+  let str;
+  if (abs >= 1_000_000) str = "$" + (abs/1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+  else if (abs >= 10_000)  str = "$" + Math.round(abs/1000) + "k";
+  else if (abs >= 1000)    str = "$" + (abs/1000).toFixed(1).replace(/\.0$/, "") + "k";
+  else str = "$" + abs.toFixed(0);
+  return n < 0 ? "(" + str + ")" : str;
+};
+const fmtSmart = (n) => window.innerWidth <= 640 ? fmtCompact(n) : fmt(n);
+
 const toUSD = (mxn) => mxn / DATA.tipo_cambio_mxn_usd;
 const fmtUSD = (mxn) => {
   if (mxn === 0 || mxn == null) return "≈ $0 USD";
@@ -954,23 +984,23 @@ function renderAnnualView(){
   cont.innerHTML = `
     <div class="annual-kpi">
       <div class="a-label">INGRESOS YTD</div>
-      <div class="a-value" style="color: var(--lime);">${fmt(totalIng)}<span class="a-currency">MXN</span></div>
+      <div class="a-value" style="color: var(--lime);">${fmtSmart(totalIng)}<span class="a-currency">MXN</span></div>
       <div class="a-usd">${fmtUSD(totalIng)}</div>
     </div>
     <div class="annual-kpi">
       <div class="a-label">EGRESOS YTD</div>
-      <div class="a-value" style="color: var(--red);">${fmt(totalEgr)}<span class="a-currency">MXN</span></div>
+      <div class="a-value" style="color: var(--red);">${fmtSmart(totalEgr)}<span class="a-currency">MXN</span></div>
       <div class="a-usd">${fmtUSD(totalEgr)}</div>
     </div>
     <div class="annual-kpi highlight ${saldo < 0 ? 'negative' : ''}">
       <div class="a-label">SALDO ACUMULADO</div>
-      <div class="a-value">${saldo >= 0 ? fmt(saldo) : '(' + fmt(Math.abs(saldo)) + ')'}<span class="a-currency">MXN</span></div>
+      <div class="a-value">${saldo >= 0 ? fmtSmart(saldo) : '(' + fmtSmart(Math.abs(saldo)) + ')'}<span class="a-currency">MXN</span></div>
       <div class="a-usd">${fmtUSD(saldo)}</div>
     </div>
     <div class="annual-kpi ${margen < 0 ? 'negative' : ''}">
-      <div class="a-label">MARGEN ANUAL</div>
+      <div class="a-label">MARGEN</div>
       <div class="a-value" style="${margen >= 20 ? 'color: var(--lime);' : (margen < 0 ? 'color: var(--red);' : '')}">${margen.toFixed(1)}<span class="a-currency">%</span></div>
-      <div class="a-usd">${margen >= 30 ? "Excelente" : margen >= 20 ? "Muy bueno" : margen >= 10 ? "Saludable" : margen >= 0 ? "Apretado" : "En pérdida"}</div>
+      <div class="a-usd">${margen >= 30 ? "Excelente" : margen >= 20 ? "Muy bueno" : margen >= 10 ? "Saludable" : margen >= 0 ? "Apretado" : "Pérdida"}</div>
     </div>
   `;
 }
@@ -1001,19 +1031,19 @@ function renderKPIs(){
   cont.innerHTML = `
     <div class="kpi kpi-accent">
       <div class="label">INGRESOS · ${MESES_SHORT[activeMonth]}</div>
-      <div class="value" style="color: var(--lime);">${fmt(k.ingresos)}<span class="currency">MXN</span></div>
+      <div class="value" style="color: var(--lime);">${fmtSmart(k.ingresos)}<span class="currency">MXN</span></div>
       <div class="usd-conv">${fmtUSD(k.ingresos)}</div>
       <div class="sub">${DATA.meses[activeMonth].ingresos.length} cobros</div>
     </div>
     <div class="kpi">
       <div class="label">EGRESOS · ${MESES_SHORT[activeMonth]}</div>
-      <div class="value" style="color: var(--red);">${fmt(k.egresos)}<span class="currency">MXN</span></div>
+      <div class="value" style="color: var(--red);">${fmtSmart(k.egresos)}<span class="currency">MXN</span></div>
       <div class="usd-conv">${fmtUSD(k.egresos)}</div>
       <div class="sub">${DATA.meses[activeMonth].egresos.reduce((s,r)=>s+(r.txs||1),0)} txs · ${DATA.meses[activeMonth].egresos.length} proveedores</div>
     </div>
     <div class="kpi ${k.saldo >= 0 ? 'positive' : 'negative'}">
       <div class="label">SALDO</div>
-      <div class="value">${k.saldo >= 0 ? fmt(k.saldo) : "(" + fmt(Math.abs(k.saldo)).replace("$","$") + ")"}<span class="currency">MXN</span></div>
+      <div class="value">${k.saldo >= 0 ? fmtSmart(k.saldo) : "(" + fmtSmart(Math.abs(k.saldo)) + ")"}<span class="currency">MXN</span></div>
       <div class="usd-conv">${fmtUSD(k.saldo)}</div>
       <div class="sub">${k.saldo >= 0 ? "Mes en positivo" : "Mes en pérdida"}</div>
     </div>
