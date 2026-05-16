@@ -428,7 +428,7 @@ const DATA = {
   tipo_cambio_fuente: "valor por defecto",
   tipo_cambio_fecha: "—",
   ano_activo: 2026,
-  ultima_actualizacion: "15 MAY 2026",
+  ultima_actualizacion: "16 MAY 2026",
   meses: {
     "enero":      { ingresos: [], egresos: [] },
     "febrero":    { ingresos: [], egresos: [] },
@@ -460,7 +460,22 @@ const DATA = {
         { vendor: "Render.com",  cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",       monto:    28.81, txs: 1, detalle: "Hosting" },
       ]
     },
-    "mayo":       { ingresos: [], egresos: [] },
+    "mayo": {
+      ingresos: [
+        { vendor: "Dr. Rafael",     cuenta: "AGENTES IA", categoria: "Setup / Implementación", monto: 10000.00, txs: 1, detalle: "2do pago implementación Agente IA" },
+        { vendor: "Velora",         cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  7165.18, txs: 1, detalle: "Pago vía Stripe — Marketing" },
+        { vendor: "Dr. Arturo",     cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  4640.00, txs: 1, detalle: "Pago Marketing (vía transferencia)" },
+        { vendor: "Portfolio Oral", cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  2393.79, txs: 1, detalle: "Pago vía Stripe — Marketing" },
+        { vendor: "Kayros",         cuenta: "AGENTES IA", categoria: "Licencia mensual",       monto:  1597.70, txs: 1, detalle: "WhatsApp + CRM (vía Stripe)" },
+        { vendor: "Dr. Arturo",     cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:   905.16, txs: 1, detalle: "Ajuste de IVA" },
+      ],
+      egresos: [
+        { vendor: "Manuela",       cuenta: "OPERACIÓN (SALARIOS Y GASTOS FIJOS)", categoria: "SALARIO",  monto: 6927.00, txs: 1, detalle: "Pago Manuela (Karla Doncell) — mayo" },
+        { vendor: "Claude.ai",     cuenta: "HERRAMIENTAS DIGITALES IA",           categoria: "SOFTWARE", monto: 2286.16, txs: 1, detalle: "Suscripción mayo (USD $131.79)" },
+        { vendor: "Anthropic",     cuenta: "HERRAMIENTAS DIGITALES IA",           categoria: "SOFTWARE", monto:  611.50, txs: 3, detalle: "Consolidado mayo (3 cargos)" },
+        { vendor: "Vercel",        cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE", monto:  350.24, txs: 1, detalle: "Hosting (USD $20.00)" },
+      ]
+    },
     "junio":      { ingresos: [], egresos: [] },
     "julio":      { ingresos: [], egresos: [] },
     "agosto":     { ingresos: [], egresos: [] },
