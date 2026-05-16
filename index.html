@@ -197,12 +197,41 @@
     margin-top: 10px; color: var(--text-3); font-size: 14px; font-weight: 300;
   }
 
+  /* SECTION DIVIDER — separa Vista Anual de Mes Activo */
+  .section-divider{
+    display: flex; align-items: center; gap: 16px;
+    margin: 0 0 20px;
+  }
+  .section-divider .line{
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.12) 100%);
+  }
+  .section-divider .line.right{
+    background: linear-gradient(90deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.12) 50%, transparent 100%);
+  }
+  .section-divider .label-block{
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 0 4px;
+  }
+  .section-divider .small{
+    font-family: var(--font-mono); font-size: 9px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .section-divider .big{
+    font-family: var(--font-body); font-style: italic;
+    font-weight: 700; font-size: 16px;
+    letter-spacing: -0.012em;
+    color: var(--text);
+  }
+  .section-divider .big .lime-dot{ color: var(--lime); }
+
   /* MONTH SELECTOR */
   .month-selector{
-    display:flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px;
-    padding: 12px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.10);
+    display:flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
+    padding: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: var(--r-md);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
@@ -258,58 +287,43 @@
     border-radius: inherit; mix-blend-mode: overlay;
   }
 
-  /* KPI GRID */
+  /* KPI GRID (mes activo — más compacto y secundario) */
   .kpis{
-    display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+    display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
     margin-bottom: 28px;
   }
   .kpi{
     position: relative;
-    background:
-      linear-gradient(180deg,
-        rgba(255,255,255,0.10) 0%,
-        rgba(255,255,255,0.04) 40%,
-        rgba(255,255,255,0.02) 100%
-      ),
-      rgba(14, 14, 12, 0.5);
-    border: 1px solid rgba(255,255,255,0.14);
-    border-radius: var(--r-xl);
-    -webkit-backdrop-filter: blur(36px) saturate(2);
-    backdrop-filter: blur(36px) saturate(2);
-    box-shadow:
-      inset 0 1.5px 0 rgba(255,255,255,0.18),
-      inset 0 -1px 0 rgba(0,0,0,0.32),
-      0 18px 50px -28px rgba(0,0,0,0.6);
-    padding: 22px; overflow: hidden;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--r-md);
+    padding: 18px 20px; overflow: hidden;
+    transition: border-color 200ms var(--ease);
   }
-  .kpi::after{
-    content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(135deg,
-      rgba(255,255,255,0.12) 0%,
-      rgba(255,255,255,0.02) 30%,
-      rgba(255,255,255,0) 60%);
-    border-radius: inherit; mix-blend-mode: overlay;
-  }
-  .kpi > *{ position: relative; z-index: 1; }
-  .kpi .label{ margin-bottom: 14px; }
+  .kpi:hover{ border-color: rgba(255,255,255,0.14); }
+  .kpi .label{ margin-bottom: 10px; }
   .kpi .value{
     font-family: var(--font-display); font-weight: 400;
-    font-size: 38px; letter-spacing: -0.03em; line-height: 1;
+    font-size: 26px; letter-spacing: -0.025em; line-height: 1;
     font-variant-numeric: tabular-nums;
   }
   .kpi .currency{
-    font-family: var(--font-mono); font-size: 11px;
+    font-family: var(--font-mono); font-size: 10px;
     color: var(--text-3); margin-left: 4px; font-weight: 400;
   }
   .kpi .sub{
-    margin-top: 12px; font-size: 11px; color: var(--text-3);
+    margin-top: 10px; font-size: 10px; color: var(--text-3);
     font-family: var(--font-mono); letter-spacing: 0.02em;
   }
   .kpi.positive .value{ color: var(--lime); }
   .kpi.negative .value{ color: var(--red); }
   .kpi-accent::before{
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1.5px;
     background: var(--lime); z-index: 2;
+  }
+  .kpi .usd-conv{
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--text-3); margin-top: 4px; letter-spacing: 0.02em;
   }
 
   /* CARDS / SECTIONS */
@@ -445,31 +459,33 @@
     .breakdown, .two-col{ grid-template-columns: 1fr; }
   }
 
-  /* ANNUAL VIEW (liquid glass + lime accent superior) */
+  /* ANNUAL VIEW (HERO — más prominente, foto del año) */
   .annual-section{
     position: relative;
     background:
       linear-gradient(180deg,
-        rgba(255,255,255,0.12) 0%,
-        rgba(255,255,255,0.045) 40%,
+        rgba(204,255,0,0.04) 0%,
+        rgba(255,255,255,0.10) 30%,
+        rgba(255,255,255,0.045) 60%,
         rgba(255,255,255,0.025) 100%
       ),
-      rgba(14, 14, 12, 0.5);
-    border: 1px solid rgba(255,255,255,0.16);
-    border-radius: var(--r-xl);
-    -webkit-backdrop-filter: blur(36px) saturate(2);
-    backdrop-filter: blur(36px) saturate(2);
+      rgba(14, 14, 12, 0.6);
+    border: 1px solid rgba(204,255,0,0.18);
+    border-radius: var(--r-2xl);
+    -webkit-backdrop-filter: blur(40px) saturate(2);
+    backdrop-filter: blur(40px) saturate(2);
     box-shadow:
       inset 0 1.5px 0 rgba(255,255,255,0.22),
       inset 0 -1px 0 rgba(0,0,0,0.32),
-      0 24px 60px -28px rgba(0,0,0,0.7);
-    padding: 24px 26px;
-    margin-bottom: 28px;
+      0 32px 80px -32px rgba(0,0,0,0.8),
+      0 0 0 1px rgba(204,255,0,0.05);
+    padding: 28px 30px 30px;
+    margin-bottom: 36px;
     overflow: hidden;
   }
   .annual-section::before{
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--lime) 0%, var(--lime-light) 50%, transparent 100%);
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--lime) 0%, var(--lime-light) 40%, transparent 100%);
     z-index: 2;
   }
   .annual-section::after{
@@ -594,6 +610,16 @@
     <span class="annual-meta" id="annualMeta">— meses con datos</span>
   </div>
   <div class="annual-kpis" id="annualKpis"></div>
+</div>
+
+<!-- SECTION DIVIDER -->
+<div class="section-divider">
+  <div class="line"></div>
+  <div class="label-block">
+    <span class="small">VISTA MENSUAL</span>
+    <span class="big">Mes activo <span class="lime-dot">·</span> <span id="activeMonthLabel">Mayo 2026</span></span>
+  </div>
+  <div class="line right"></div>
 </div>
 
 <!-- MONTH SELECTOR -->
@@ -1057,6 +1083,10 @@ function renderAll(){
     "Mes activo: " + activeMonth.charAt(0).toUpperCase() + activeMonth.slice(1) + " " + DATA.ano_activo +
     " · Moneda: " + DATA.moneda +
     " · USD ≈ $" + DATA.tipo_cambio_mxn_usd.toFixed(2) + " MXN";
+  const activeMonthLabelEl = document.getElementById("activeMonthLabel");
+  if (activeMonthLabelEl){
+    activeMonthLabelEl.textContent = activeMonth.charAt(0).toUpperCase() + activeMonth.slice(1) + " " + DATA.ano_activo;
+  }
   renderAnnualView();
   renderMonthSelector();
   renderKPIs();
