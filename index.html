@@ -478,7 +478,12 @@
 
   /* ─── MOBILE (≤ 640px) ────────────────────────────────────────── */
   @media (max-width: 640px){
-    body{ padding: 16px 14px 60px; }
+    body{
+      padding-top: max(20px, calc(env(safe-area-inset-top) + 12px)) !important;
+      padding-right: max(14px, env(safe-area-inset-right)) !important;
+      padding-bottom: max(60px, env(safe-area-inset-bottom)) !important;
+      padding-left: max(14px, env(safe-area-inset-left)) !important;
+    }
 
     /* HEADER compacto */
     .header{ padding-bottom: 16px; margin-bottom: 20px; }
