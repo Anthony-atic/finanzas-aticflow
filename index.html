@@ -937,7 +937,8 @@ const fmt = (n) => {
 };
 const fmtFull = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-/* Compacto para móvil: $1,234 → $1.2k, $103,123 → $103k, $1,234,567 → $1.2M */
+/* Nota: fmtCompact disponible para uso futuro si necesitamos formato corto.
+ * Actualmente usamos fmt() (número entero) en todos los KPIs. */
 const fmtCompact = (n) => {
   if (n === 0 || n == null) return "$0";
   const abs = Math.abs(n);
@@ -948,7 +949,6 @@ const fmtCompact = (n) => {
   else str = "$" + Math.round(abs);
   return n < 0 ? "(" + str + ")" : str;
 };
-const fmt = (n) => window.innerWidth <= 640 ? fmtCompact(n) : fmt(n);
 
 const toUSD = (mxn) => mxn / DATA.tipo_cambio_mxn_usd;
 const fmtUSD = (mxn) => {
