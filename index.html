@@ -515,9 +515,8 @@
       letter-spacing: 0.08em;
     }
     .annual-kpi .a-value{
-      font-size: 17px; letter-spacing: -0.025em;
+      font-size: 19px; letter-spacing: -0.025em;
       line-height: 1.05; white-space: nowrap;
-      overflow: hidden; text-overflow: ellipsis;
     }
     .annual-kpi .a-currency{ font-size: 8px; margin-left: 2px; }
     .annual-kpi .a-usd{
@@ -933,7 +932,7 @@ const fmt = (n) => {
 };
 const fmtFull = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-/* Compacto para móvil: $103,123 → $103k, $1,234,567 → $1.2M */
+/* Compacto para móvil: $1,234 → $1.2k, $103,123 → $103k, $1,234,567 → $1.2M */
 const fmtCompact = (n) => {
   if (n === 0 || n == null) return "$0";
   const abs = Math.abs(n);
@@ -941,7 +940,7 @@ const fmtCompact = (n) => {
   if (abs >= 1_000_000) str = "$" + (abs/1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
   else if (abs >= 10_000)  str = "$" + Math.round(abs/1000) + "k";
   else if (abs >= 1000)    str = "$" + (abs/1000).toFixed(1).replace(/\.0$/, "") + "k";
-  else str = "$" + abs.toFixed(0);
+  else str = "$" + Math.round(abs);
   return n < 0 ? "(" + str + ")" : str;
 };
 const fmtSmart = (n) => window.innerWidth <= 640 ? fmtCompact(n) : fmt(n);
