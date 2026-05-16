@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FINANZAS · atic.FLOW</title>
+
+<!-- TIPOGRAFÍAS -->
+<style>
+  @font-face {
+    font-family: 'AICON';
+    src: url('./branding/Tipografias/aicon/AICON-Regular.otf') format('opentype');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'AICON';
+    src: url('./branding/Tipografias/aicon/AICON-Medium.otf') format('opentype');
+    font-weight: 500; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'AICON';
+    src: url('./branding/Tipografias/aicon/AICON-SemiBold.otf') format('opentype');
+    font-weight: 600; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'AICON';
+    src: url('./branding/Tipografias/aicon/AICON-Bold.otf') format('opentype');
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'AICON';
+    src: url('./branding/Tipografias/aicon/AICON-ExtraBold.otf') format('opentype');
+    font-weight: 800; font-style: normal; font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'LT Wave';
+    src: url('./branding/Tipografias/LT_wave/LTWave-Light.otf') format('opentype');
+    font-weight: 300; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'LT Wave';
+    src: url('./branding/Tipografias/LT_wave/LTWave-Regular.otf') format('opentype');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'LT Wave';
+    src: url('./branding/Tipografias/LT_wave/LTWave-Medium.otf') format('opentype');
+    font-weight: 500; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'LT Wave';
+    src: url('./branding/Tipografias/LT_wave/LTWave-Bold.otf') format('opentype');
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'LT Wave Mono';
+    src: url('./branding/Tipografias/LT_wave/LTWaveMono-Regular.otf') format('opentype');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'LT Wave Mono';
+    src: url('./branding/Tipografias/LT_wave/LTWaveMono-Medium.otf') format('opentype');
+    font-weight: 500; font-style: normal; font-display: swap;
+  }
+</style>
+
+<style>
+  :root{
+    --lime: #CCFF00;
+    --lime-dim: #B8E600;
+    --lime-soft: rgba(204,255,0,.12);
+    --lime-soft-strong: rgba(204,255,0,.22);
+    --blue: #2563EB;
+    --red: #EF4444;
+    --red-soft: rgba(239,68,68,.10);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245,158,11,.12);
+    --bg: #000000;
+    --surface: #111111;
+    --surface-2: #161616;
+    --surface-3: #1C1C1C;
+    --line: rgba(255,255,255,.07);
+    --line-strong: rgba(255,255,255,.14);
+    --text: #FAFAFA;
+    --text-2: rgba(250,250,250,.72);
+    --text-3: rgba(250,250,250,.46);
+    --text-4: rgba(250,250,250,.28);
+    --font-display: 'AICON', system-ui, sans-serif;
+    --font-body: 'LT Wave', system-ui, sans-serif;
+    --font-mono: 'LT Wave Mono', ui-monospace, monospace;
+    --r-xs: 8px; --r-sm: 12px; --r-md: 16px; --r-lg: 20px; --r-xl: 24px;
+    --pad: 24px;
+    --ease: cubic-bezier(0.32, 0.72, 0.24, 1);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html, body{ background: var(--bg); color: var(--text); font-family: var(--font-body); }
+  body{ min-height: 100vh; padding: 28px 32px 80px; }
+
+  /* HEADER */
+  .header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-bottom: 24px; border-bottom: 1px solid var(--line);
+    margin-bottom: 28px;
+  }
+  .logo{ display:flex; align-items:baseline; gap:2px; }
+  .logo .atic{
+    font-family: var(--font-body);
+    font-weight: 700; font-style: italic;
+    font-size: 22px; color: var(--text); letter-spacing: -0.01em;
+  }
+  .logo .flow{
+    font-family: var(--font-body);
+    font-weight: 800; font-style: italic;
+    font-size: 22px; color: var(--lime); letter-spacing: -0.01em;
+  }
+  .header-right{ display:flex; align-items:center; gap:16px; }
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .label{
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  /* TITLE */
+  .title-row{ margin-bottom: 28px; }
+  .title-row .eyebrow{ margin-bottom: 8px; }
+  .title-row h1{
+    font-family: var(--font-body);
+    font-weight: 700; font-size: 36px; letter-spacing: -0.022em;
+    line-height: 1.1;
+  }
+  .title-row h1 .accent{ color: var(--lime); }
+  .title-row p{
+    margin-top: 10px; color: var(--text-3); font-size: 14px; font-weight: 300;
+  }
+
+  /* MONTH SELECTOR */
+  .month-selector{
+    display:flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px;
+    padding: 12px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-md);
+  }
+  .month-btn{
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 14px; border-radius: 999px;
+    background: transparent; border: 1px solid var(--line);
+    color: var(--text-3); cursor: pointer;
+    transition: all 160ms var(--ease);
+  }
+  .month-btn:hover{ color: var(--text); border-color: var(--line-strong); }
+  .month-btn.active{
+    background: var(--lime); color: #000; border-color: var(--lime);
+    font-weight: 700;
+  }
+  .month-btn.has-data::after{
+    content:'·'; margin-left: 5px; color: var(--lime);
+    font-size: 16px; line-height: 0;
+  }
+  .month-btn.active.has-data::after{ color: #000; }
+  .month-btn.empty{ opacity: .4; cursor: not-allowed; }
+
+  /* KPI GRID */
+  .kpis{
+    display:grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    margin-bottom: 28px;
+  }
+  .kpi{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-xl); padding: 22px; position: relative; overflow: hidden;
+  }
+  .kpi .label{ margin-bottom: 14px; }
+  .kpi .value{
+    font-family: var(--font-display); font-weight: 800;
+    font-size: 34px; letter-spacing: -0.02em; line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi .currency{
+    font-family: var(--font-mono); font-size: 12px;
+    color: var(--text-3); margin-left: 4px;
+  }
+  .kpi .sub{
+    margin-top: 10px; font-size: 12px; color: var(--text-3);
+    font-family: var(--font-mono);
+  }
+  .kpi.positive .value{ color: var(--lime); }
+  .kpi.negative .value{ color: var(--red); }
+  .kpi-accent::before{
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--lime);
+  }
+
+  /* CARDS / SECTIONS */
+  .card{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-xl); padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-header{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom: 20px;
+  }
+  .card-header h2{
+    font-family: var(--font-body); font-weight: 700; font-size: 18px;
+    letter-spacing: -0.012em;
+  }
+
+  /* CHART */
+  .chart-wrap{
+    height: 320px; position: relative;
+  }
+  #evolutionChart{ width: 100% !important; height: 100% !important; }
+
+  /* BREAKDOWN GRID */
+  .breakdown{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  .breakdown-card{
+    background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: 18px;
+  }
+  .breakdown-card h3{
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-3); margin-bottom: 14px; font-weight: 500;
+  }
+  .breakdown-row{
+    display:flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--line);
+    font-family: var(--font-body); font-size: 13px;
+  }
+  .breakdown-row:last-child{ border-bottom: none; }
+  .breakdown-row .name{ color: var(--text-2); font-weight: 400; }
+  .breakdown-row .amount{
+    font-family: var(--font-mono); font-weight: 500;
+    color: var(--text); font-variant-numeric: tabular-nums;
+  }
+  .breakdown-row .bar-bg{
+    flex: 1; height: 4px; background: var(--surface-3);
+    border-radius: 999px; margin: 0 12px; overflow: hidden;
+  }
+  .breakdown-row .bar-fill{
+    height: 100%; background: var(--lime);
+    border-radius: 999px; transition: width 400ms var(--ease);
+  }
+  .breakdown-row.expense .bar-fill{ background: var(--red); }
+
+  /* MOVEMENTS TABLE */
+  .movs-table{ width: 100%; border-collapse: collapse; }
+  .movs-table th{
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-3); text-align: left; font-weight: 500;
+    padding: 10px 12px; border-bottom: 1px solid var(--line);
+  }
+  .movs-table td{
+    padding: 12px; border-bottom: 1px solid var(--line);
+    font-size: 13px; color: var(--text-2);
+  }
+  .movs-table tr:last-child td{ border-bottom: none; }
+  .movs-table td.amount{
+    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    text-align: right; color: var(--text); font-weight: 500;
+  }
+  .movs-table td.amount.income{ color: var(--lime); }
+  .movs-table td.amount.expense{ color: var(--red); }
+  .movs-table td.amount .usd-mini{
+    display: block; font-family: var(--font-mono); font-size: 10px;
+    font-weight: 400; color: var(--text-3); margin-top: 2px;
+    letter-spacing: 0.02em;
+  }
+  .usd-conv{
+    font-family: var(--font-mono); font-size: 11px; font-weight: 400;
+    color: var(--text-3); margin-top: 6px; letter-spacing: 0.02em;
+  }
+  .breakdown-row .amount .usd-mini{
+    display: block; font-family: var(--font-mono); font-size: 9px;
+    color: var(--text-3); font-weight: 400; margin-top: 1px;
+    text-align: right; letter-spacing: 0.02em;
+  }
+  .pill{
+    display:inline-block; padding: 3px 9px; border-radius: 999px;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--surface-3); color: var(--text-2);
+    border: 1px solid var(--line);
+  }
+  .pill-lime{ background: var(--lime-soft); color: var(--lime); border-color: var(--lime-soft-strong); }
+  .pill-red{ background: var(--red-soft); color: var(--red); border-color: rgba(239,68,68,.20); }
+
+  /* TWO-COL */
+  .two-col{ display:grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 900px){
+    .kpis{ grid-template-columns: repeat(2, 1fr); }
+    .breakdown, .two-col{ grid-template-columns: 1fr; }
+  }
+
+  /* EMPTY STATE */
+  .empty-state{
+    padding: 60px 20px; text-align: center;
+    color: var(--text-3); font-size: 13px;
+    font-family: var(--font-mono);
+  }
+  .empty-state .big{
+    font-family: var(--font-display); font-size: 28px;
+    color: var(--text-4); margin-bottom: 12px; letter-spacing: -0.02em;
+  }
+
+  /* FOOTER */
+  .footer{
+    margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line);
+    display:flex; justify-content: space-between; align-items: center;
+    color: var(--text-3); font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+
+  /* TAG */
+  .tag-year{
+    font-family: var(--font-mono); font-size: 11px;
+    background: var(--lime); color: #000; padding: 4px 10px;
+    border-radius: 999px; font-weight: 700; letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <span class="atic">atic.</span><span class="flow">FLOW</span>
+  </div>
+  <div class="header-right">
+    <span class="eyebrow">FINANZAS · DASHBOARD</span>
+    <span class="tag-year" id="yearTag">2026</span>
+  </div>
+</div>
+
+<!-- TITLE -->
+<div class="title-row">
+  <div class="eyebrow">CONTABILIDAD · VISTA MENSUAL</div>
+  <h1>El pulso del <span class="accent">negocio</span>.</h1>
+  <p id="subtitle">Ingresos, egresos y saldo en tiempo real. Datos cargados desde Claude Cowork.</p>
+</div>
+
+<!-- MONTH SELECTOR -->
+<div class="month-selector" id="monthSelector"></div>
+
+<!-- KPIs -->
+<div class="kpis" id="kpis"></div>
+
+<!-- CHART -->
+<div class="card">
+  <div class="card-header">
+    <h2>Evolución mensual</h2>
+    <span class="label">2026 · MXN</span>
+  </div>
+  <div class="chart-wrap">
+    <canvas id="evolutionChart"></canvas>
+  </div>
+</div>
+
+<!-- BREAKDOWN -->
+<div class="breakdown" id="breakdown"></div>
+
+<!-- DETAIL TABLES -->
+<div class="two-col" style="margin-top: 20px;">
+  <div class="card">
+    <div class="card-header">
+      <h2>Ingresos del mes</h2>
+      <span class="pill pill-lime" id="incomeCount">0 txs</span>
+    </div>
+    <table class="movs-table" id="incomeTable">
+      <thead>
+        <tr><th>Cliente</th><th>Cuenta</th><th style="text-align:right;">Monto</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Egresos del mes</h2>
+      <span class="pill pill-red" id="expenseCount">0 txs</span>
+    </div>
+    <table class="movs-table" id="expenseTable">
+      <thead>
+        <tr><th>Proveedor</th><th>Cuenta</th><th style="text-align:right;">Monto</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>atic.FLOW · INTERNAL · v1.1</span>
+  <span id="tipoCambio">TIPO DE CAMBIO — </span>
+  <span id="lastUpdate">ÚLTIMA ACTUALIZACIÓN —</span>
+</div>
+
+<!-- CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<!-- DATA -->
+<script>
+/*
+ * ATIC.FLOW · DASHBOARD DE FINANZAS
+ * --------------------------------------------------------
+ * Para agregar un nuevo mes:
+ *   1. Editar el objeto DATA.meses (clave: nombre del mes en minúsculas)
+ *   2. Agregar las txs en arrays "ingresos" y "egresos"
+ *   3. Formato de tx: { vendor, cuenta, categoria, monto, txs, detalle }
+ *   4. Guardar y recargar el navegador.
+ */
+const DATA = {
+  negocio: "atic.FLOW",
+  moneda: "MXN",
+  tipo_cambio_mxn_usd: 18.50,  // valor por defecto; se actualiza automáticamente al abrir el dashboard
+  tipo_cambio_fuente: "valor por defecto",
+  tipo_cambio_fecha: "—",
+  ano_activo: 2026,
+  ultima_actualizacion: "15 MAY 2026",
+  meses: {
+    "enero":      { ingresos: [], egresos: [] },
+    "febrero":    { ingresos: [], egresos: [] },
+    "marzo":      { ingresos: [], egresos: [] },
+    "abril": {
+      ingresos: [
+        { vendor: "Hima",        cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto: 54520.00, txs: 1, detalle: "Desarrollo inmobiliario: MKT + CRM" },
+        { vendor: "Dr. Rafael",  cuenta: "AGENTES IA", categoria: "Setup / Implementación", monto:  5000.00, txs: 1, detalle: "Estética: 1er pago de 3 (implementación IA)" },
+        { vendor: "Dr. Rafael",  cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  7064.40, txs: 1, detalle: "Estética: Estrategia MKT" },
+        { vendor: "Dr. Arturo",  cuenta: "AGENTES IA", categoria: "Licencia mensual",       monto:  4000.00, txs: 1, detalle: "Ginecología: Mensualidad IA" },
+        { vendor: "Dr. Arturo",  cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  2565.15, txs: 1, detalle: "Ginecología: Estrategia MKT" },
+        { vendor: "Kayros",      cuenta: "AGENTES IA", categoria: "Licencia mensual",       monto:  3271.09, txs: 1, detalle: "Inmobiliario: WhatsApp + CRM" },
+      ],
+      egresos: [
+        { vendor: "Marcos",      cuenta: "OPERACIÓN (SALARIOS Y GASTOS FIJOS)", categoria: "SALARIO",        monto: 24307.00, txs: 1, detalle: "Pago abril" },
+        { vendor: "Anthony",     cuenta: "OPERACIÓN (SALARIOS Y GASTOS FIJOS)", categoria: "SALARIO PROPIO", monto: 20800.00, txs: 1, detalle: "Pago abril" },
+        { vendor: "Juliana",     cuenta: "OPERACIÓN (SALARIOS Y GASTOS FIJOS)", categoria: "SALARIO",        monto:  9600.00, txs: 1, detalle: "Pago abril" },
+        { vendor: "HighLevel",   cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",       monto:  5374.18, txs: 2, detalle: "GHL consolidado" },
+        { vendor: "Anthropic",   cuenta: "HERRAMIENTAS DIGITALES IA",           categoria: "SOFTWARE",       monto:  4483.60, txs:15, detalle: "Consolidado (15 cargos)" },
+        { vendor: "Google",      cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",       monto:  3360.51, txs: 2, detalle: "GOGHL / Workspace" },
+        { vendor: "SiteGround",  cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",       monto:   604.55, txs: 2, detalle: "Hosting" },
+        { vendor: "Notion",      cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",       monto:   487.27, txs: 1, detalle: "Suscripción" },
+        { vendor: "Twilio",      cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",       monto:   454.32, txs: 2, detalle: "Consolidado" },
+        { vendor: "OpenAI",      cuenta: "HERRAMIENTAS DIGITALES IA",           categoria: "SOFTWARE",       monto:   358.01, txs: 1, detalle: "Suscripción" },
+        { vendor: "Netlify",     cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",       monto:   358.01, txs: 1, detalle: "Hosting" },
+        { vendor: "Vturb",       cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",       monto:   329.81, txs: 1, detalle: "Suscripción" },
+        { vendor: "Miro",        cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",       monto:   174.69, txs: 1, detalle: "Suscripción" },
+        { vendor: "Railway",     cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",       monto:    87.03, txs: 1, detalle: "Hosting" },
+        { vendor: "Render.com",  cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",       monto:    28.81, txs: 1, detalle: "Hosting" },
+      ]
+    },
+    "mayo":       { ingresos: [], egresos: [] },
+    "junio":      { ingresos: [], egresos: [] },
+    "julio":      { ingresos: [], egresos: [] },
+    "agosto":     { ingresos: [], egresos: [] },
+    "septiembre": { ingresos: [], egresos: [] },
+    "octubre":    { ingresos: [], egresos: [] },
+    "noviembre":  { ingresos: [], egresos: [] },
+    "diciembre":  { ingresos: [], egresos: [] },
+  }
+};
+</script>
+
+<!-- LOGIC -->
+<script>
+const MESES_ORDER = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+const MESES_SHORT = { enero:"ENE",febrero:"FEB",marzo:"MAR",abril:"ABR",mayo:"MAY",junio:"JUN",julio:"JUL",agosto:"AGO",septiembre:"SEP",octubre:"OCT",noviembre:"NOV",diciembre:"DIC" };
+
+let activeMonth = "abril"; // default
+let chart = null;
+
+const fmt = (n) => {
+  if (n === 0 || n == null) return "$0";
+  const abs = Math.abs(n);
+  let str;
+  if (abs >= 1000) str = "$" + abs.toLocaleString("en-US", { maximumFractionDigits: 0 });
+  else str = "$" + abs.toFixed(2);
+  return n < 0 ? "(" + str + ")" : str;
+};
+const fmtFull = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+const toUSD = (mxn) => mxn / DATA.tipo_cambio_mxn_usd;
+const fmtUSD = (mxn) => {
+  if (mxn === 0 || mxn == null) return "≈ $0 USD";
+  const usd = Math.abs(toUSD(mxn));
+  let str;
+  if (usd >= 1000) str = "$" + usd.toLocaleString("en-US", { maximumFractionDigits: 0 });
+  else if (usd >= 10) str = "$" + usd.toFixed(0);
+  else str = "$" + usd.toFixed(1);
+  return "≈ " + str + " USD";
+};
+
+function monthTotals(mes){
+  const data = DATA.meses[mes];
+  if (!data) return { ingresos: 0, egresos: 0, saldo: 0, margen: 0 };
+  const i = data.ingresos.reduce((s,r)=>s+r.monto, 0);
+  const e = data.egresos.reduce((s,r)=>s+r.monto, 0);
+  return { ingresos: i, egresos: e, saldo: i - e, margen: i > 0 ? ((i - e) / i) * 100 : 0 };
+}
+function hasData(mes){
+  const d = DATA.meses[mes];
+  return d && (d.ingresos.length > 0 || d.egresos.length > 0);
+}
+
+/* MONTH SELECTOR */
+function renderMonthSelector(){
+  const sel = document.getElementById("monthSelector");
+  sel.innerHTML = "";
+  MESES_ORDER.forEach(mes => {
+    const btn = document.createElement("button");
+    btn.className = "month-btn";
+    btn.textContent = MESES_SHORT[mes];
+    if (hasData(mes)) btn.classList.add("has-data");
+    else btn.classList.add("empty");
+    if (mes === activeMonth) btn.classList.add("active");
+    btn.addEventListener("click", () => {
+      activeMonth = mes;
+      renderAll();
+    });
+    sel.appendChild(btn);
+  });
+}
+
+/* KPIs */
+function renderKPIs(){
+  const k = monthTotals(activeMonth);
+  const cont = document.getElementById("kpis");
+  cont.innerHTML = `
+    <div class="kpi kpi-accent">
+      <div class="label">INGRESOS · ${MESES_SHORT[activeMonth]}</div>
+      <div class="value" style="color: var(--lime);">${fmt(k.ingresos)}<span class="currency">MXN</span></div>
+      <div class="usd-conv">${fmtUSD(k.ingresos)}</div>
+      <div class="sub">${DATA.meses[activeMonth].ingresos.length} cobros</div>
+    </div>
+    <div class="kpi">
+      <div class="label">EGRESOS · ${MESES_SHORT[activeMonth]}</div>
+      <div class="value" style="color: var(--red);">${fmt(k.egresos)}<span class="currency">MXN</span></div>
+      <div class="usd-conv">${fmtUSD(k.egresos)}</div>
+      <div class="sub">${DATA.meses[activeMonth].egresos.reduce((s,r)=>s+(r.txs||1),0)} txs · ${DATA.meses[activeMonth].egresos.length} proveedores</div>
+    </div>
+    <div class="kpi ${k.saldo >= 0 ? 'positive' : 'negative'}">
+      <div class="label">SALDO</div>
+      <div class="value">${k.saldo >= 0 ? fmt(k.saldo) : "(" + fmt(Math.abs(k.saldo)).replace("$","$") + ")"}<span class="currency">MXN</span></div>
+      <div class="usd-conv">${fmtUSD(k.saldo)}</div>
+      <div class="sub">${k.saldo >= 0 ? "Mes en positivo" : "Mes en pérdida"}</div>
+    </div>
+    <div class="kpi ${k.margen >= 10 ? 'positive' : (k.margen >= 0 ? '' : 'negative')}">
+      <div class="label">MARGEN</div>
+      <div class="value" style="${k.margen >= 10 ? 'color: var(--lime);' : (k.margen < 0 ? 'color: var(--red);' : '')}">${k.margen.toFixed(1)}<span class="currency">%</span></div>
+      <div class="usd-conv" style="visibility: hidden;">·</div>
+      <div class="sub">${k.margen >= 20 ? "Excelente" : k.margen >= 10 ? "Saludable" : k.margen >= 0 ? "Apretado" : "Negativo"}</div>
+    </div>
+  `;
+}
+
+/* CHART */
+function renderChart(){
+  const ctx = document.getElementById("evolutionChart").getContext("2d");
+  const labels = MESES_ORDER.map(m => MESES_SHORT[m]);
+  const ingresos = MESES_ORDER.map(m => monthTotals(m).ingresos);
+  const egresos = MESES_ORDER.map(m => monthTotals(m).egresos);
+  const saldo = MESES_ORDER.map(m => monthTotals(m).saldo);
+
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Ingresos',
+          data: ingresos,
+          backgroundColor: 'rgba(204,255,0,.85)',
+          borderColor: '#CCFF00',
+          borderWidth: 0,
+          borderRadius: 4,
+          stack: 'a',
+          order: 2,
+        },
+        {
+          label: 'Egresos',
+          data: egresos.map(v => -v),
+          backgroundColor: 'rgba(239,68,68,.85)',
+          borderColor: '#EF4444',
+          borderWidth: 0,
+          borderRadius: 4,
+          stack: 'b',
+          order: 2,
+        },
+        {
+          label: 'Saldo neto',
+          data: saldo,
+          type: 'line',
+          borderColor: '#FAFAFA',
+          backgroundColor: 'rgba(250,250,250,0)',
+          borderWidth: 2,
+          tension: 0.35,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointBackgroundColor: '#FAFAFA',
+          pointBorderColor: '#000',
+          pointBorderWidth: 2,
+          order: 1,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'top', align: 'end',
+          labels: {
+            color: 'rgba(250,250,250,.72)',
+            font: { family: 'LT Wave Mono', size: 11 },
+            usePointStyle: true, pointStyle: 'circle', padding: 16, boxWidth: 8, boxHeight: 8,
+          }
+        },
+        tooltip: {
+          backgroundColor: '#000',
+          titleColor: '#CCFF00',
+          bodyColor: '#FAFAFA',
+          borderColor: 'rgba(255,255,255,.14)', borderWidth: 1,
+          padding: 12, cornerRadius: 8,
+          titleFont: { family: 'LT Wave Mono', size: 11 },
+          bodyFont: { family: 'LT Wave', size: 12 },
+          callbacks: {
+            label: (ctx) => {
+              const v = ctx.parsed.y;
+              return ctx.dataset.label + ': $' + Math.abs(v).toLocaleString('en-US', { maximumFractionDigits: 0 });
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: 'rgba(250,250,250,.46)', font: { family: 'LT Wave Mono', size: 10 } }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,.05)' },
+          ticks: {
+            color: 'rgba(250,250,250,.46)',
+            font: { family: 'LT Wave Mono', size: 10 },
+            callback: (v) => '$' + (Math.abs(v) >= 1000 ? (Math.abs(v)/1000).toFixed(0) + 'k' : Math.abs(v))
+          }
+        }
+      }
+    }
+  });
+}
+
+/* BREAKDOWN */
+function renderBreakdown(){
+  const data = DATA.meses[activeMonth];
+  const cont = document.getElementById("breakdown");
+  if (!data || (data.ingresos.length === 0 && data.egresos.length === 0)){
+    cont.innerHTML = '';
+    return;
+  }
+  const groupByCuenta = (arr) => {
+    const map = {};
+    arr.forEach(r => { map[r.cuenta] = (map[r.cuenta] || 0) + r.monto; });
+    return Object.entries(map).sort((a,b) => b[1] - a[1]);
+  };
+
+  const ingByCuenta = groupByCuenta(data.ingresos);
+  const egrByCuenta = groupByCuenta(data.egresos);
+  const totalIng = ingByCuenta.reduce((s,[,v]) => s+v, 0);
+  const totalEgr = egrByCuenta.reduce((s,[,v]) => s+v, 0);
+
+  const renderRows = (arr, total, isExpense) => arr.map(([name, val]) => `
+    <div class="breakdown-row ${isExpense ? 'expense' : ''}">
+      <span class="name" style="flex:0 0 auto; max-width: 40%;">${name}</span>
+      <div class="bar-bg"><div class="bar-fill" style="width:${total > 0 ? (val/total*100).toFixed(1) : 0}%"></div></div>
+      <span class="amount">${fmt(val)}<span class="usd-mini">${fmtUSD(val)}</span></span>
+    </div>`).join("");
+
+  cont.innerHTML = `
+    <div class="breakdown-card">
+      <h3>Ingresos por cuenta</h3>
+      ${renderRows(ingByCuenta, totalIng, false)}
+    </div>
+    <div class="breakdown-card">
+      <h3>Egresos por cuenta</h3>
+      ${renderRows(egrByCuenta, totalEgr, true)}
+    </div>
+  `;
+}
+
+/* TABLES */
+function renderTables(){
+  const data = DATA.meses[activeMonth];
+
+  // Income
+  const incomeBody = document.querySelector("#incomeTable tbody");
+  document.getElementById("incomeCount").textContent = data.ingresos.length + " cobros";
+  if (data.ingresos.length === 0){
+    incomeBody.innerHTML = `<tr><td colspan="3" class="empty-state"><div class="big">—</div>Sin ingresos cargados</td></tr>`;
+  } else {
+    incomeBody.innerHTML = data.ingresos
+      .sort((a,b) => b.monto - a.monto)
+      .map(r => `
+        <tr>
+          <td>${r.vendor}<div style="color: var(--text-3); font-size: 11px; margin-top: 2px;">${r.detalle || ''}</div></td>
+          <td><span class="pill">${r.cuenta.split(' ')[0]}</span><div style="color: var(--text-3); font-size: 10px; margin-top: 4px; font-family: var(--font-mono);">${r.categoria}</div></td>
+          <td class="amount income">${fmtFull(r.monto)}<span class="usd-mini">${fmtUSD(r.monto)}</span></td>
+        </tr>`).join("");
+  }
+
+  // Expense
+  const expenseBody = document.querySelector("#expenseTable tbody");
+  const totalTxs = data.egresos.reduce((s,r)=>s+(r.txs||1),0);
+  document.getElementById("expenseCount").textContent = totalTxs + " txs";
+  if (data.egresos.length === 0){
+    expenseBody.innerHTML = `<tr><td colspan="3" class="empty-state"><div class="big">—</div>Sin egresos cargados</td></tr>`;
+  } else {
+    expenseBody.innerHTML = data.egresos
+      .sort((a,b) => b.monto - a.monto)
+      .map(r => {
+        const shortCuenta = r.cuenta === "OPERACIÓN (SALARIOS Y GASTOS FIJOS)" ? "OPERACIÓN" :
+                            r.cuenta === "HERRAMIENTAS DIGITALES IA" ? "HD · IA" :
+                            r.cuenta === "HERRAMIENTAS DIGITALES" ? "HD" : r.cuenta;
+        return `
+        <tr>
+          <td>${r.vendor}${r.txs > 1 ? '<span class="pill" style="margin-left:6px;">' + r.txs + ' txs</span>' : ''}<div style="color: var(--text-3); font-size: 11px; margin-top: 2px;">${r.detalle || ''}</div></td>
+          <td><span class="pill">${shortCuenta}</span><div style="color: var(--text-3); font-size: 10px; margin-top: 4px; font-family: var(--font-mono);">${r.categoria}</div></td>
+          <td class="amount expense">${fmtFull(r.monto)}<span class="usd-mini">${fmtUSD(r.monto)}</span></td>
+        </tr>`;
+      }).join("");
+  }
+}
+
+function renderAll(){
+  document.getElementById("yearTag").textContent = DATA.ano_activo;
+  document.getElementById("lastUpdate").textContent = "ÚLTIMA ACTUALIZACIÓN — " + DATA.ultima_actualizacion;
+  document.getElementById("tipoCambio").textContent =
+    "USD ≈ $" + DATA.tipo_cambio_mxn_usd.toFixed(2) + " MXN · " + DATA.tipo_cambio_fuente.toUpperCase() +
+    (DATA.tipo_cambio_fecha !== "—" ? " · " + DATA.tipo_cambio_fecha : "");
+  document.getElementById("subtitle").textContent =
+    "Mes activo: " + activeMonth.charAt(0).toUpperCase() + activeMonth.slice(1) + " " + DATA.ano_activo +
+    " · Moneda: " + DATA.moneda +
+    " · USD ≈ $" + DATA.tipo_cambio_mxn_usd.toFixed(2) + " MXN";
+  renderMonthSelector();
+  renderKPIs();
+  renderChart();
+  renderBreakdown();
+  renderTables();
+}
+
+/* TIPO DE CAMBIO EN VIVO
+ * Intenta varias APIs públicas gratuitas (sin API key) en cascada.
+ * Si todas fallan, usa el valor por defecto (18.50).
+ */
+async function fetchTipoCambio(){
+  document.getElementById("tipoCambio").textContent = "ACTUALIZANDO TIPO DE CAMBIO…";
+
+  // Fuente 1: open.er-api.com (sin API key, muy confiable)
+  try {
+    const res = await fetch("https://open.er-api.com/v6/latest/USD");
+    if (res.ok){
+      const j = await res.json();
+      if (j.result === "success" && j.rates && j.rates.MXN){
+        DATA.tipo_cambio_mxn_usd = parseFloat(j.rates.MXN);
+        DATA.tipo_cambio_fuente = "ER-API";
+        const d = new Date(j.time_last_update_unix * 1000);
+        DATA.tipo_cambio_fecha = d.toLocaleDateString("es-MX", { day:"2-digit", month:"short", year:"numeric" }).toUpperCase();
+        return;
+      }
+    }
+  } catch(e) { console.warn("Fuente 1 falló:", e); }
+
+  // Fuente 2: frankfurter.app (BCE, sin API key)
+  try {
+    const res = await fetch("https://api.frankfurter.app/latest?from=USD&to=MXN");
+    if (res.ok){
+      const j = await res.json();
+      if (j.rates && j.rates.MXN){
+        DATA.tipo_cambio_mxn_usd = parseFloat(j.rates.MXN);
+        DATA.tipo_cambio_fuente = "BCE (Frankfurter)";
+        DATA.tipo_cambio_fecha = j.date ? j.date.toUpperCase() : "—";
+        return;
+      }
+    }
+  } catch(e) { console.warn("Fuente 2 falló:", e); }
+
+  // Fallback: valor por defecto
+  DATA.tipo_cambio_fuente = "valor por defecto (sin conexión)";
+}
+
+(async function init(){
+  renderAll();           // pinta con el valor por defecto inmediatamente
+  await fetchTipoCambio(); // actualiza si la API responde
+  renderAll();           // repinta con el valor real
+})();
+</script>
+
+</body>
+</html>
