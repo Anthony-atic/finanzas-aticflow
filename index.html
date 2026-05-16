@@ -2,7 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0b0b09" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
 <title>FINANZAS · atic.FLOW</title>
 
 <!-- TIPOGRAFÍAS -->
@@ -129,11 +132,15 @@
     font-feature-settings: "ss01", "cv01";
   }
   body{
-    min-height: 100dvh; padding: 28px 32px 80px;
+    min-height: 100dvh;
+    padding: max(28px, env(safe-area-inset-top)) max(32px, env(safe-area-inset-right)) max(80px, env(safe-area-inset-bottom)) max(32px, env(safe-area-inset-left));
     overflow-x: hidden;
     position: relative;
+    -webkit-tap-highlight-color: rgba(204,255,0,0.2);
   }
   ::selection { background: var(--lime); color: #000; }
+  /* Mejor feedback táctil */
+  button, .month-btn { -webkit-tap-highlight-color: rgba(204,255,0,0.25); touch-action: manipulation; }
 
   /* GLOW BLOBS (decoración de fondo — fixed para que no se mueva con scroll) */
   body::before, body::after {
@@ -453,10 +460,134 @@
 
   /* TWO-COL */
   .two-col{ display:grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  /* ─── TABLET (≤ 900px) ────────────────────────────────────────── */
   @media (max-width: 900px){
     .kpis{ grid-template-columns: repeat(2, 1fr); }
     .annual-kpis{ grid-template-columns: repeat(2, 1fr) !important; }
     .breakdown, .two-col{ grid-template-columns: 1fr; }
+  }
+
+  /* ─── MOBILE (≤ 640px) ────────────────────────────────────────── */
+  @media (max-width: 640px){
+    body{ padding: 16px 14px 60px; }
+
+    /* HEADER compacto */
+    .header{ padding-bottom: 16px; margin-bottom: 20px; }
+    .logo .atic, .logo .flow{ font-size: 18px; }
+    .header-right{ gap: 8px; }
+    .header-right .eyebrow{ display: none; }
+    .tag-year{ font-size: 9px; padding: 3px 8px; }
+
+    /* TITLE compacto */
+    .title-row{ margin-bottom: 20px; }
+    .title-row h1{ font-size: 22px; line-height: 1.15; }
+    .title-row p{ font-size: 12px; margin-top: 8px; }
+
+    /* ANNUAL SECTION compacta */
+    .annual-section{
+      padding: 20px 18px 22px; margin-bottom: 24px;
+      border-radius: var(--r-xl);
+    }
+    .annual-header{ flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 14px; }
+    .annual-header-left{ gap: 8px; align-items: baseline; flex-wrap: wrap; }
+    .annual-header h2{ font-size: 16px; }
+    .annual-meta{ font-size: 9px; letter-spacing: 0.08em; }
+    .annual-kpis{ gap: 10px !important; }
+    .annual-kpi{ padding: 12px 14px; }
+    .annual-kpi .a-label{ font-size: 9px; margin-bottom: 8px; }
+    .annual-kpi .a-value{ font-size: 22px; letter-spacing: -0.025em; }
+    .annual-kpi .a-currency{ font-size: 10px; }
+    .annual-kpi .a-usd{ font-size: 9px; }
+
+    /* SECTION DIVIDER stack */
+    .section-divider{ margin-bottom: 16px; gap: 10px; }
+    .section-divider .small{ font-size: 8px; }
+    .section-divider .big{ font-size: 13px; }
+
+    /* MONTH SELECTOR — scroll horizontal en lugar de wrap */
+    .month-selector{
+      flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory;
+      padding: 8px; gap: 6px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .month-selector::-webkit-scrollbar{ display: none; }
+    .month-btn{
+      flex: 0 0 auto; scroll-snap-align: start;
+      min-height: 36px; padding: 9px 14px;
+      font-size: 11px;
+    }
+
+    /* KPIS del mes — 1 columna en móvil pequeño, más compactos */
+    .kpis{ grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+    .kpi{ padding: 14px 16px; }
+    .kpi .label{ font-size: 9px; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .kpi .value{ font-size: 20px; letter-spacing: -0.02em; }
+    .kpi .currency{ font-size: 9px; }
+    .kpi .sub{ font-size: 9px; margin-top: 8px; }
+    .kpi .usd-conv{ font-size: 9px; margin-top: 3px; }
+
+    /* CARDS */
+    .card{ padding: 18px 16px; margin-bottom: 16px; border-radius: var(--r-lg); }
+    .card-header{ margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+    .card-header h2{ font-size: 15px; }
+    .card-header .label{ font-size: 9px; }
+
+    /* CHART más bajo */
+    .chart-wrap{ height: 240px; }
+
+    /* BREAKDOWN compacto */
+    .breakdown{ gap: 12px; }
+    .breakdown-card{ padding: 14px 14px; }
+    .breakdown-card h3{ font-size: 9px; margin-bottom: 10px; }
+    .breakdown-row{ font-size: 12px; padding: 8px 0; }
+    .breakdown-row .name{ font-size: 11px; max-width: 35% !important; }
+    .breakdown-row .bar-bg{ margin: 0 8px; }
+    .breakdown-row .amount{ font-size: 11px; }
+    .breakdown-row .amount .usd-mini{ font-size: 8px; }
+
+    /* TABLAS → CARDS APILADAS en móvil */
+    .movs-table{ display: block; }
+    .movs-table thead{ display: none; }
+    .movs-table tbody, .movs-table tr, .movs-table td{ display: block; }
+    .movs-table tr{
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--r-md); padding: 12px 14px;
+      margin-bottom: 8px; position: relative;
+    }
+    .movs-table tr:last-child td{ border-bottom: none; }
+    .movs-table td{ border: none !important; padding: 4px 0; font-size: 13px; }
+    .movs-table td:first-child{
+      font-weight: 600; color: var(--text); font-size: 14px;
+      padding-bottom: 2px;
+    }
+    .movs-table td.amount{
+      text-align: left; font-size: 16px; font-family: var(--font-display);
+      font-weight: 400; letter-spacing: -0.02em;
+      margin-top: 6px; padding-top: 6px;
+      border-top: 1px solid rgba(255,255,255,0.06) !important;
+    }
+    .movs-table td.amount .usd-mini{
+      display: inline-block; margin-left: 8px; font-size: 10px;
+    }
+    .movs-table .pill{ font-size: 9px; padding: 2px 7px; }
+
+    /* PILL más pequeño */
+    .pill{ font-size: 9px; padding: 2px 7px; }
+
+    /* FOOTER stack */
+    .footer{ flex-direction: column; gap: 6px; align-items: flex-start; font-size: 9px; text-align: left; }
+
+    /* GLOW BLOBS — más pequeños para no saturar */
+    body::before{ width: 240px; height: 240px; top: -80px; left: 10%; }
+    body::after{ width: 200px; height: 200px; bottom: 60px; right: -15%; }
+  }
+
+  /* ─── MUY PEQUEÑO (≤ 380px) ───────────────────────────────────── */
+  @media (max-width: 380px){
+    .kpis{ grid-template-columns: 1fr; }
+    .annual-kpis{ grid-template-columns: 1fr !important; }
   }
 
   /* ANNUAL VIEW (HERO — más prominente, foto del año) */
@@ -903,6 +1034,7 @@ function renderChart(){
   const egresos = MESES_ORDER.map(m => monthTotals(m).egresos);
   const saldo = MESES_ORDER.map(m => monthTotals(m).saldo);
 
+  const isMobile = window.innerWidth <= 640;
   if (chart) chart.destroy();
   chart = new Chart(ctx, {
     type: 'bar',
@@ -951,11 +1083,13 @@ function renderChart(){
       interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: {
-          position: 'top', align: 'end',
+          position: 'top', align: isMobile ? 'center' : 'end',
           labels: {
             color: 'rgba(250,250,250,.72)',
-            font: { family: 'LT Wave Mono', size: 11 },
-            usePointStyle: true, pointStyle: 'circle', padding: 16, boxWidth: 8, boxHeight: 8,
+            font: { family: 'LT Wave Mono', size: isMobile ? 9 : 11 },
+            usePointStyle: true, pointStyle: 'circle',
+            padding: isMobile ? 10 : 16,
+            boxWidth: 8, boxHeight: 8,
           }
         },
         tooltip: {
@@ -977,13 +1111,18 @@ function renderChart(){
       scales: {
         x: {
           grid: { display: false },
-          ticks: { color: 'rgba(250,250,250,.46)', font: { family: 'LT Wave Mono', size: 10 } }
+          ticks: {
+            color: 'rgba(250,250,250,.46)',
+            font: { family: 'LT Wave Mono', size: isMobile ? 8 : 10 },
+            maxRotation: 0, autoSkip: !isMobile,
+          }
         },
         y: {
           grid: { color: 'rgba(255,255,255,.05)' },
           ticks: {
             color: 'rgba(250,250,250,.46)',
-            font: { family: 'LT Wave Mono', size: 10 },
+            font: { family: 'LT Wave Mono', size: isMobile ? 8 : 10 },
+            maxTicksLimit: isMobile ? 5 : 8,
             callback: (v) => '$' + (Math.abs(v) >= 1000 ? (Math.abs(v)/1000).toFixed(0) + 'k' : Math.abs(v))
           }
         }
@@ -1178,6 +1317,13 @@ async function fetchTipoCambio(){
     const el = document.getElementById("lastUpdate");
     if (el) el.textContent = getLastUpdateString();
   }, 60000);
+
+  // Re-render al rotar / cambiar tamaño (debounced)
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => renderChart(), 200);
+  });
 })();
 </script>
 
