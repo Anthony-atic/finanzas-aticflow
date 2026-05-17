@@ -1642,16 +1642,19 @@ function renderTrackingSummary(){
     <div class="item">
       <div class="lbl">ESPERADO · ${mesLabel.toUpperCase()}</div>
       <div class="val lime">${fmt(esperadoMes)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+      <div class="usd-conv" style="margin-top:6px;">${fmtUSD(esperadoMes)}</div>
       <div class="sub">${clientesConCobro} cobros este mes</div>
     </div>
     <div class="item">
       <div class="lbl">COBRADO · ${mesLabel.toUpperCase()}</div>
       <div class="val">${fmt(cobradoMes)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+      <div class="usd-conv" style="margin-top:6px;">${fmtUSD(cobradoMes)}</div>
       <div class="sub">${cumplimientoPct}% del esperado del mes</div>
     </div>
     <div class="item">
       <div class="lbl">PENDIENTE · ${mesLabel.toUpperCase()}</div>
       <div class="val ${pendienteMes > 0 ? 'red' : 'lime'}">${fmt(pendienteMes)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+      <div class="usd-conv" style="margin-top:6px;">${fmtUSD(pendienteMes)}</div>
       <div class="sub">${pendienteMes > 0 ? 'Cobranza por gestionar' : 'Mes cobrado'}</div>
     </div>
   `;
