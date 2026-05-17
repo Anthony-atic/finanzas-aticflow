@@ -1617,50 +1617,42 @@ function estadoCobro(cliente, mes, currentMonthIdx, monthIdx){
 }
 
 function renderTrackingSummary(){
-  // Esperado total mensual estable (suma de mensualidades, sin contar plan_implementacion)
-  const esperadoMensualEstable = DATA.clientes_recurrentes
-    .filter(c => c.activo)
-    .reduce((s, c) => s + (c.mensualidad || 0), 0);
-
-  // Cobrado YTD (solo desde mes_inicio)
-  const cobradoYTD = DATA.clientes_recurrentes
-    .filter(c => c.activo)
-    .reduce((sum, c) => sum + MESES_ACTIVOS.reduce((s, m) => s + cobrosEnMes(c, m), 0), 0);
-
-  // Esperado YTD (sumando desde mes_inicio hasta el mes actual)
+  // Determinar mes en curso
   const today = new Date();
   const isThisYear = today.getFullYear() === DATA.ano_activo;
-  const currentMonthIdx = isThisYear ? today.getMonth() : 11; // si es año pasado, todo el año
-  const esperadoYTD = DATA.clientes_recurrentes.filter(c => c.activo).reduce((sum, c) => {
-    let total = 0;
-    for (let i = MES_INICIO_IDX; i <= currentMonthIdx; i++){
-      total += esperadoEnMes(c, MESES_ORDER[i]);
-    }
-    return sum + total;
-  }, 0);
+  const currentMonthIdx = isThisYear ? today.getMonth() : 11;
+  const currentMonth = MESES_ORDER[currentMonthIdx] || activeMonth;
+  const mesLabel = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1);
 
-  const pendiente = esperadoYTD - cobradoYTD;
-  const proyeccionAnual = DATA.clientes_recurrentes.filter(c => c.activo).reduce((sum, c) => {
-    let total = 0;
-    for (const mes of MESES_ACTIVOS) total += esperadoEnMes(c, mes);
-    return sum + total;
-  }, 0);
+  // Cálculos sobre el MES ACTUAL
+  const clientesActivos = DATA.clientes_recurrentes.filter(c => c.activo);
+
+  let esperadoMes = 0, cobradoMes = 0, clientesConCobro = 0;
+  clientesActivos.forEach(c => {
+    const esp = esperadoEnMes(c, currentMonth);
+    const cob = cobrosEnMes(c, currentMonth);
+    esperadoMes += esp;
+    cobradoMes += cob;
+    if (esp > 0) clientesConCobro++;
+  });
+  const pendienteMes = Math.max(0, esperadoMes - cobradoMes);
+  const cumplimientoPct = esperadoMes > 0 ? Math.round(cobradoMes / esperadoMes * 100) : (cobradoMes > 0 ? 100 : 0);
 
   document.getElementById("trackingSummary").innerHTML = `
     <div class="item">
-      <div class="lbl">PROYECCIÓN ANUAL</div>
-      <div class="val lime">${fmt(proyeccionAnual)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-      <div class="sub">${DATA.clientes_recurrentes.filter(c=>c.activo).length} clientes recurrentes</div>
+      <div class="lbl">ESPERADO · ${mesLabel.toUpperCase()}</div>
+      <div class="val lime">${fmt(esperadoMes)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+      <div class="sub">${clientesConCobro} cobros este mes</div>
     </div>
     <div class="item">
-      <div class="lbl">COBRADO YTD</div>
-      <div class="val">${fmt(cobradoYTD)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-      <div class="sub">vs ${fmt(esperadoYTD)} esperado · ${esperadoYTD > 0 ? Math.round(cobradoYTD/esperadoYTD*100) : 0}%</div>
+      <div class="lbl">COBRADO · ${mesLabel.toUpperCase()}</div>
+      <div class="val">${fmt(cobradoMes)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+      <div class="sub">${cumplimientoPct}% del esperado del mes</div>
     </div>
     <div class="item">
-      <div class="lbl">PENDIENTE YTD</div>
-      <div class="val ${pendiente > 0 ? 'red' : 'lime'}">${pendiente > 0 ? fmt(pendiente) : '$0'}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-      <div class="sub">${pendiente > 0 ? 'Cobranza por gestionar' : 'Al día'}</div>
+      <div class="lbl">PENDIENTE · ${mesLabel.toUpperCase()}</div>
+      <div class="val ${pendienteMes > 0 ? 'red' : 'lime'}">${fmt(pendienteMes)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+      <div class="sub">${pendienteMes > 0 ? 'Cobranza por gestionar' : 'Mes cobrado'}</div>
     </div>
   `;
 }
