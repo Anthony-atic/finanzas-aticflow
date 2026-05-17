@@ -628,11 +628,13 @@
     .annual-kpis{ grid-template-columns: 1fr !important; }
   }
 
-  /* ANNUAL VIEW (HERO — sticky en desktop, se queda arriba al scrollear) */
+  /* ANNUAL VIEW (BANNER FIJO arriba pegado a la barra del navegador en desktop) */
   .annual-section{
-    position: sticky;
-    top: 16px;
-    z-index: 50;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    border-radius: 0 !important;
+    padding: 14px 32px 18px !important;
     background:
       linear-gradient(180deg,
         rgba(204,255,0,0.04) 0%,
@@ -777,6 +779,8 @@
   }
   .page{ display: none; }
   .page.active{ display: block; animation: fade-in 200ms var(--ease-out); }
+  /* En desktop, dashboard tiene padding-top para no taparse con el banner fijo */
+  #page-dashboard{ padding-top: 0; }
   @keyframes fade-in{
     from { opacity: 0; transform: translateY(4px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -1873,9 +1877,26 @@ function switchPage(name){
   }
 
   // Re-render charts cuando volvemos a Dashboard (Chart.js necesita un container visible)
-  if (name === "dashboard") setTimeout(() => renderChart(), 50);
+  if (name === "dashboard") setTimeout(() => { renderChart(); adjustBannerSpace(); }, 50);
+  else removeBannerSpace();
 
   window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* Ajustar el espacio que ocupa el banner fijo (solo desktop) para que el contenido no se tape */
+function adjustBannerSpace(){
+  if (window.innerWidth <= 640) {
+    document.getElementById("page-dashboard").style.paddingTop = "";
+    return;
+  }
+  const banner = document.querySelector("#page-dashboard .annual-section");
+  if (!banner) return;
+  const h = banner.getBoundingClientRect().height;
+  document.getElementById("page-dashboard").style.paddingTop = (h + 16) + "px";
+}
+function removeBannerSpace(){
+  const dash = document.getElementById("page-dashboard");
+  if (dash) dash.style.paddingTop = "";
 }
 
 function initRouting(){
@@ -1930,8 +1951,11 @@ function updateNavCount(){
   let resizeTimer;
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => renderChart(), 200);
+    resizeTimer = setTimeout(() => { renderChart(); adjustBannerSpace(); }, 200);
   });
+
+  // Ajustar espacio del banner después del primer render
+  setTimeout(() => adjustBannerSpace(), 100);
 })();
 </script>
 
