@@ -500,6 +500,8 @@
     /* ANNUAL SECTION — IDÉNTICO a KPIs mensuales en móvil
        (uso !important porque CSS desktop está más abajo y pisa) */
     .annual-section{
+      position: relative !important; /* desactivar sticky en móvil */
+      top: auto !important;
       padding: 16px 12px 18px !important;
       margin-bottom: 24px !important;
       border-radius: var(--r-lg) !important;
@@ -626,9 +628,11 @@
     .annual-kpis{ grid-template-columns: 1fr !important; }
   }
 
-  /* ANNUAL VIEW (HERO — más prominente, foto del año) */
+  /* ANNUAL VIEW (HERO — sticky en desktop, se queda arriba al scrollear) */
   .annual-section{
-    position: relative;
+    position: sticky;
+    top: 16px;
+    z-index: 50;
     background:
       linear-gradient(180deg,
         rgba(204,255,0,0.04) 0%,
