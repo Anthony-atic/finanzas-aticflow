@@ -512,10 +512,10 @@
     .annual-header h2{ font-size: 15px !important; letter-spacing: -0.01em !important; }
     .annual-meta{ font-size: 8px !important; letter-spacing: 0.1em !important; line-height: 1.4 !important; }
 
-    /* KPIs anuales — MISMO tamaño exacto que .kpi del mes activo */
+    /* KPIs anuales — MISMO tamaño exacto que .kpi del mes activo (con 2 decimales) */
     .annual-kpis{ gap: 10px !important; }
     .annual-kpi{
-      padding: 14px 14px !important;
+      padding: 14px 12px !important;
       min-width: 0 !important; overflow: hidden !important;
       border-radius: var(--r-sm) !important;
     }
@@ -524,11 +524,11 @@
       margin-bottom: 8px !important;
     }
     .annual-kpi .a-value{
-      font-size: 17px !important; letter-spacing: -0.02em !important;
+      font-size: 14px !important; letter-spacing: -0.02em !important;
       line-height: 1 !important; white-space: nowrap !important;
     }
     .annual-kpi .a-currency{
-      font-size: 9px !important; margin-left: 3px !important; font-weight: 400 !important;
+      font-size: 8px !important; margin-left: 3px !important; font-weight: 400 !important;
     }
     .annual-kpi .a-usd{
       font-size: 9px !important; margin-top: 6px !important;
@@ -554,12 +554,12 @@
       font-size: 11px;
     }
 
-    /* KPIS del mes — número entero, font reducido */
+    /* KPIS del mes — con 2 decimales, font reducido para que quepa */
     .kpis{ grid-template-columns: 1fr 1fr !important; gap: 10px !important; margin-bottom: 24px !important; }
-    .kpi{ padding: 14px 14px !important; }
+    .kpi{ padding: 14px 12px !important; }
     .kpi .label{ font-size: 9px !important; letter-spacing: 0.08em !important; margin-bottom: 8px !important; }
-    .kpi .value{ font-size: 17px !important; letter-spacing: -0.02em !important; white-space: nowrap !important; }
-    .kpi .currency{ font-size: 9px !important; margin-left: 3px !important; }
+    .kpi .value{ font-size: 14px !important; letter-spacing: -0.02em !important; white-space: nowrap !important; }
+    .kpi .currency{ font-size: 8px !important; margin-left: 3px !important; }
     .kpi .sub{ font-size: 9px !important; margin-top: 8px !important; }
     .kpi .usd-conv{ font-size: 9px !important; margin-top: 4px !important; }
 
@@ -1099,8 +1099,7 @@ const DATA = {
         { vendor: "Hima",        cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto: 54520.00, txs: 1, detalle: "Desarrollo inmobiliario: MKT + CRM" },
         { vendor: "Dr. Rafael",  cuenta: "AGENTES IA", categoria: "Setup / Implementación", monto:  5000.00, txs: 1, detalle: "Estética: 1er pago de 3 (implementación IA)" },
         { vendor: "Dr. Rafael",  cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  7064.40, txs: 1, detalle: "Estética: Estrategia MKT" },
-        { vendor: "Dr. Arturo",  cuenta: "AGENTES IA", categoria: "Licencia mensual",       monto:  4000.00, txs: 1, detalle: "Ginecología: Mensualidad IA" },
-        { vendor: "Dr. Arturo",  cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  2565.15, txs: 1, detalle: "Ginecología: Estrategia MKT" },
+        { vendor: "Dr. Arturo",  cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  6565.15, txs: 1, detalle: "Ginecología: Estrategia MKT (no hubo IA en abril)" },
         { vendor: "Kayros",      cuenta: "AGENTES IA", categoria: "Licencia mensual",       monto:  3271.09, txs: 1, detalle: "Inmobiliario: WhatsApp + CRM" },
       ],
       egresos: [
@@ -1180,12 +1179,11 @@ const MESES_ACTIVOS = MESES_ORDER.slice(MES_INICIO_IDX);  // meses visibles (a p
 let activeMonth = DATA.mes_inicio || "abril"; // default = primer mes activo
 let chart = null;
 
+/* Contabilidad: SIEMPRE 2 decimales */
 const fmt = (n) => {
-  if (n === 0 || n == null) return "$0";
+  if (n == null) return "$0.00";
   const abs = Math.abs(n);
-  let str;
-  if (abs >= 1000) str = "$" + abs.toLocaleString("en-US", { maximumFractionDigits: 0 });
-  else str = "$" + abs.toFixed(2);
+  const str = "$" + abs.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   return n < 0 ? "(" + str + ")" : str;
 };
 const fmtFull = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
