@@ -1220,7 +1220,17 @@ const MESES_SHORT = { enero:"ENE",febrero:"FEB",marzo:"MAR",abril:"ABR",mayo:"MA
 const MES_INICIO_IDX = MESES_ORDER.indexOf(DATA.mes_inicio || "enero");
 const MESES_ACTIVOS = MESES_ORDER.slice(MES_INICIO_IDX);  // meses visibles (a partir del inicio del negocio)
 
-let activeMonth = DATA.mes_inicio || "abril"; // default = primer mes activo
+/* Mes activo por defecto = MES ACTUAL real (si es del año activo y dentro de meses activos),
+ * sino cae al mes_inicio del negocio. */
+function defaultActiveMonth(){
+  const today = new Date();
+  if (today.getFullYear() === DATA.ano_activo){
+    const currentMonth = MESES_ORDER[today.getMonth()];
+    if (MESES_ACTIVOS.includes(currentMonth)) return currentMonth;
+  }
+  return DATA.mes_inicio || "abril";
+}
+let activeMonth = "abril"; // se sobrescribe después de que MESES_ACTIVOS esté disponible
 let chart = null;
 
 /* Contabilidad: SIEMPRE 2 decimales */
@@ -1898,6 +1908,7 @@ function updateNavCount(){
 }
 
 (async function init(){
+  activeMonth = defaultActiveMonth(); // mes actual real (o mes_inicio si no aplica)
   renderAll();           // pinta con el valor por defecto inmediatamente
   initRouting();         // configura tabs y hash routing
   updateNavCount();      // contador en el tab
