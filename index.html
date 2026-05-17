@@ -736,6 +736,53 @@
     letter-spacing: 0.08em; text-transform: uppercase;
   }
 
+  /* ─── NAVBAR / TABS ────────────────────────────────────────────── */
+  .nav-tabs{
+    display: flex; gap: 6px;
+    padding: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    margin-bottom: 24px;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    width: fit-content;
+  }
+  .nav-tab{
+    font-family: var(--font-mono); font-weight: 500;
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 9px 18px; border-radius: 999px;
+    background: transparent; border: none;
+    color: var(--text-3); cursor: pointer;
+    transition: all 160ms var(--ease);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-tab:hover{ color: var(--text); }
+  .nav-tab.active{
+    background: var(--lime); color: #000;
+    font-weight: 700;
+  }
+  .nav-tab .count{
+    font-family: var(--font-mono); font-size: 9px;
+    padding: 2px 6px; border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: var(--text-3); font-weight: 500;
+  }
+  .nav-tab.active .count{
+    background: rgba(0,0,0,0.2); color: #000;
+  }
+  .page{ display: none; }
+  .page.active{ display: block; animation: fade-in 200ms var(--ease-out); }
+  @keyframes fade-in{
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 640px){
+    .nav-tabs{ width: 100% !important; }
+    .nav-tab{ flex: 1; justify-content: center !important; padding: 9px 10px !important; font-size: 10px !important; }
+  }
+
   /* ─── SEGUIMIENTO DE COBROS ──────────────────────────────────── */
   .tracking-section{ margin-bottom: 28px; }
   .tracking-summary{
@@ -891,6 +938,17 @@
   <p id="subtitle">Ingresos, egresos y saldo en tiempo real. Datos cargados desde Claude Cowork.</p>
 </div>
 
+<!-- NAVBAR / TABS -->
+<div class="nav-tabs" role="tablist">
+  <button class="nav-tab active" data-page="dashboard">Dashboard</button>
+  <button class="nav-tab" data-page="tracking">Seguimiento Pagos <span class="count" id="navCountPending">—</span></button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PÁGINA: DASHBOARD
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page active" id="page-dashboard">
+
 <!-- ANNUAL VIEW · SALDO ACUMULADO -->
 <div class="annual-section">
   <div class="annual-header">
@@ -901,35 +959,6 @@
     <span class="annual-meta" id="annualMeta">— meses con datos</span>
   </div>
   <div class="annual-kpis" id="annualKpis"></div>
-</div>
-
-<!-- SEGUIMIENTO DE COBROS RECURRENTES -->
-<div class="tracking-section">
-  <div class="card-header" style="margin-bottom: 14px;">
-    <div>
-      <span class="eyebrow">SEGUIMIENTO · COBROS RECURRENTES</span>
-      <h2 style="font-family: var(--font-body); font-weight: 700; font-size: 18px; letter-spacing: -0.012em; margin-top: 4px;">Pagos por cliente</h2>
-    </div>
-  </div>
-
-  <div class="tracking-summary" id="trackingSummary"></div>
-
-  <div class="tracking-table-wrap">
-    <table class="tracking-table">
-      <thead>
-        <tr>
-          <th class="cliente">Cliente</th>
-          <th style="text-align:right;">Esperado/mes</th>
-          <th class="month">ENE</th><th class="month">FEB</th><th class="month">MAR</th>
-          <th class="month">ABR</th><th class="month">MAY</th><th class="month">JUN</th>
-          <th class="month">JUL</th><th class="month">AGO</th><th class="month">SEP</th>
-          <th class="month">OCT</th><th class="month">NOV</th><th class="month">DIC</th>
-          <th style="text-align:center;">Cumplimiento</th>
-        </tr>
-      </thead>
-      <tbody id="trackingTableBody"></tbody>
-    </table>
-  </div>
 </div>
 
 <!-- SECTION DIVIDER -->
@@ -991,9 +1020,49 @@
   </div>
 </div>
 
+</div><!-- /page-dashboard -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PÁGINA: SEGUIMIENTO DE PAGOS
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="page-tracking">
+
+  <div class="title-row">
+    <div class="eyebrow">SEGUIMIENTO · COBROS RECURRENTES</div>
+    <h1>Pagos por <span style="color: var(--lime);">cliente</span>.</h1>
+    <p>Quién pagó, quién falta, y proyección anual basada en cobros recurrentes.</p>
+  </div>
+
+  <div class="tracking-section">
+    <div class="tracking-summary" id="trackingSummary"></div>
+
+    <div class="tracking-table-wrap">
+      <table class="tracking-table">
+        <thead>
+          <tr id="trackingTableHead">
+            <th class="cliente">Cliente</th>
+            <th style="text-align:right;">Esperado/mes</th>
+            <!-- meses se inyectan dinámicamente desde JS -->
+            <th style="text-align:center;">Cumplimiento</th>
+          </tr>
+        </thead>
+        <tbody id="trackingTableBody"></tbody>
+      </table>
+    </div>
+
+    <div style="margin-top: 14px; font-family: var(--font-mono); font-size: 10px; color: var(--text-3); letter-spacing: 0.02em; line-height: 1.6;">
+      <span class="tracking-cell paid" style="padding: 2px 6px;"><span class="check">✓</span></span> PAGADO &nbsp;·&nbsp;
+      <span class="tracking-cell partial" style="padding: 2px 6px;"><span class="check">!</span></span> PARCIAL &nbsp;·&nbsp;
+      <span class="tracking-cell pending" style="padding: 2px 6px;"><span class="check">○</span></span> PENDIENTE &nbsp;·&nbsp;
+      <span style="color: var(--text-4);">monto en gris</span> = futuro proyectado
+    </div>
+  </div>
+
+</div><!-- /page-tracking -->
+
 <!-- FOOTER -->
 <div class="footer">
-  <span>atic.FLOW · INTERNAL · v1.1</span>
+  <span>atic.FLOW · INTERNAL · v1.2</span>
   <span id="tipoCambio">TIPO DE CAMBIO — </span>
   <span id="lastUpdate">ÚLTIMA ACTUALIZACIÓN —</span>
 </div>
@@ -1019,6 +1088,7 @@ const DATA = {
   tipo_cambio_fuente: "valor por defecto",
   tipo_cambio_fecha: "—",
   ano_activo: 2026,
+  mes_inicio: "abril",  // primer mes del negocio (oculta meses anteriores en vistas y gráficas)
   ultima_actualizacion: "16 MAY 2026",
   meses: {
     "enero":      { ingresos: [], egresos: [] },
@@ -1085,17 +1155,17 @@ const DATA = {
   clientes_recurrentes: [
     { id:"hima",          nombre:"Hima",                    servicio:"Marketing",       vendor:"Hima",          mensualidad: 54520,  activo:true },
     { id:"rafael-mkt",    nombre:"Dr. Rafael · MKT",        servicio:"Marketing",       vendor:"Dr. Rafael",    categoria:"Estrategia MKT",         mensualidad:  7064,  activo:true },
-    { id:"rafael-ia",     nombre:"Dr. Rafael · IA Setup",   servicio:"Implementación",  vendor:"Dr. Rafael",    categoria:"Setup / Implementación", mensualidad: 0, activo:true,
+    { id:"rafael-ia",     nombre:"Dr. Rafael · IA",         servicio:"Setup → Mensualidad",  vendor:"Dr. Rafael",    categoria:"Setup / Implementación", mensualidad: 4640, activo:true,
       plan_implementacion: { "abril": 5000, "mayo": 10000, "junio": 15000 },
-      nota: "3 cuotas (ABR/MAY/JUN). Después: $4,640 mensual IA mantenimiento." },
+      nota: "3 cuotas setup (ABR/MAY/JUN). A partir de JUL: $4,000 + IVA mensual." },
     { id:"arturo-ia",     nombre:"Dr. Arturo · IA",         servicio:"Agentes IA",      vendor:"Dr. Arturo",    categoria:"Licencia mensual",       mensualidad:  4640,  activo:true },
     { id:"arturo-mkt",    nombre:"Dr. Arturo · MKT",        servicio:"Marketing",       vendor:"Dr. Arturo",    categoria:"Estrategia MKT",         mensualidad:  6566,  activo:true },
     { id:"kayros",        nombre:"Kayros",                  servicio:"IA + CRM",        vendor:"Kayros",        mensualidad:  3271,  activo:true },
     { id:"velora",        nombre:"Velora",                  servicio:"Marketing",       vendor:"Velora",        mensualidad:  7165,  activo:true },
     { id:"portfolio-oral",nombre:"Portfolio Oral",          servicio:"Marketing",       vendor:"Portfolio Oral",mensualidad:  2394,  activo:true },
     { id:"karla-doncel",  nombre:"Karla Doncel",            servicio:"Implementación",  vendor:"Karla Doncel",  mensualidad: 0,  activo:true,
-      plan_implementacion: { "mayo": 30000, "julio": 15000, "agosto": 15000 },
-      nota: "3 pagos (MAY/JUL/AGO). Total $60,000 sin IVA." },
+      plan_implementacion: { "mayo": 30000, "junio": 15000, "julio": 15000 },
+      nota: "3 pagos (MAY/JUN/JUL). Total $60,000 sin IVA." },
   ],
 };
 </script>
@@ -1104,8 +1174,10 @@ const DATA = {
 <script>
 const MESES_ORDER = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 const MESES_SHORT = { enero:"ENE",febrero:"FEB",marzo:"MAR",abril:"ABR",mayo:"MAY",junio:"JUN",julio:"JUL",agosto:"AGO",septiembre:"SEP",octubre:"OCT",noviembre:"NOV",diciembre:"DIC" };
+const MES_INICIO_IDX = MESES_ORDER.indexOf(DATA.mes_inicio || "enero");
+const MESES_ACTIVOS = MESES_ORDER.slice(MES_INICIO_IDX);  // meses visibles (a partir del inicio del negocio)
 
-let activeMonth = "abril"; // default
+let activeMonth = DATA.mes_inicio || "abril"; // default = primer mes activo
 let chart = null;
 
 const fmt = (n) => {
@@ -1157,7 +1229,7 @@ function hasData(mes){
 /* ANNUAL VIEW · acumulado del año */
 function renderAnnualView(){
   let totalIng = 0, totalEgr = 0, monthsWithData = 0, bestMonth = null, bestSaldo = -Infinity;
-  MESES_ORDER.forEach(mes => {
+  MESES_ACTIVOS.forEach(mes => {
     const t = monthTotals(mes);
     if (hasData(mes)){
       totalIng += t.ingresos;
@@ -1203,7 +1275,7 @@ function renderAnnualView(){
 function renderMonthSelector(){
   const sel = document.getElementById("monthSelector");
   sel.innerHTML = "";
-  MESES_ORDER.forEach(mes => {
+  MESES_ACTIVOS.forEach(mes => {
     const btn = document.createElement("button");
     btn.className = "month-btn";
     btn.textContent = MESES_SHORT[mes];
@@ -1253,10 +1325,10 @@ function renderKPIs(){
 /* CHART */
 function renderChart(){
   const ctx = document.getElementById("evolutionChart").getContext("2d");
-  const labels = MESES_ORDER.map(m => MESES_SHORT[m]);
-  const ingresos = MESES_ORDER.map(m => monthTotals(m).ingresos);
-  const egresos = MESES_ORDER.map(m => monthTotals(m).egresos);
-  const saldo = MESES_ORDER.map(m => monthTotals(m).saldo);
+  const labels = MESES_ACTIVOS.map(m => MESES_SHORT[m]);
+  const ingresos = MESES_ACTIVOS.map(m => monthTotals(m).ingresos);
+  const egresos = MESES_ACTIVOS.map(m => monthTotals(m).egresos);
+  const saldo = MESES_ACTIVOS.map(m => monthTotals(m).saldo);
 
   const isMobile = window.innerWidth <= 640;
   if (chart) chart.destroy();
@@ -1508,18 +1580,18 @@ function renderTrackingSummary(){
     .filter(c => c.activo)
     .reduce((s, c) => s + (c.mensualidad || 0), 0);
 
-  // Cobrado YTD
+  // Cobrado YTD (solo desde mes_inicio)
   const cobradoYTD = DATA.clientes_recurrentes
     .filter(c => c.activo)
-    .reduce((sum, c) => sum + MESES_ORDER.reduce((s, m) => s + cobrosEnMes(c, m), 0), 0);
+    .reduce((sum, c) => sum + MESES_ACTIVOS.reduce((s, m) => s + cobrosEnMes(c, m), 0), 0);
 
-  // Esperado YTD (sumando mes a mes hasta el actual)
+  // Esperado YTD (sumando desde mes_inicio hasta el mes actual)
   const today = new Date();
   const isThisYear = today.getFullYear() === DATA.ano_activo;
   const currentMonthIdx = isThisYear ? today.getMonth() : 11; // si es año pasado, todo el año
   const esperadoYTD = DATA.clientes_recurrentes.filter(c => c.activo).reduce((sum, c) => {
     let total = 0;
-    for (let i = 0; i <= currentMonthIdx; i++){
+    for (let i = MES_INICIO_IDX; i <= currentMonthIdx; i++){
       total += esperadoEnMes(c, MESES_ORDER[i]);
     }
     return sum + total;
@@ -1528,7 +1600,7 @@ function renderTrackingSummary(){
   const pendiente = esperadoYTD - cobradoYTD;
   const proyeccionAnual = DATA.clientes_recurrentes.filter(c => c.activo).reduce((sum, c) => {
     let total = 0;
-    for (const mes of MESES_ORDER) total += esperadoEnMes(c, mes);
+    for (const mes of MESES_ACTIVOS) total += esperadoEnMes(c, mes);
     return sum + total;
   }, 0);
 
@@ -1556,6 +1628,18 @@ function renderTrackingTable(){
   const isThisYear = today.getFullYear() === DATA.ano_activo;
   const currentMonthIdx = isThisYear ? today.getMonth() : 11;
 
+  // Inyectar headers de meses dinámicamente (solo meses activos)
+  const thead = document.getElementById("trackingTableHead");
+  if (thead){
+    const monthHeaders = MESES_ACTIVOS.map(m => `<th class="month">${MESES_SHORT[m]}</th>`).join("");
+    thead.innerHTML = `
+      <th class="cliente">Cliente</th>
+      <th style="text-align:right;">Esperado/mes</th>
+      ${monthHeaders}
+      <th style="text-align:center;">Cumplimiento</th>
+    `;
+  }
+
   const tbody = document.getElementById("trackingTableBody");
   const clientes = DATA.clientes_recurrentes.filter(c => c.activo);
 
@@ -1566,7 +1650,8 @@ function renderTrackingTable(){
     let totalCobrado = 0, totalEsperado = 0;
     let cells = "";
 
-    MESES_ORDER.forEach((mes, idx) => {
+    MESES_ACTIVOS.forEach((mes, localIdx) => {
+      const idx = MES_INICIO_IDX + localIdx; // índice global (0-11)
       const est = estadoCobro(c, mes, currentMonthIdx, idx);
       totalCobrado += est.real;
       totalEsperado += est.esperado;
@@ -1588,11 +1673,11 @@ function renderTrackingTable(){
       cells += `<td class="cell">${cellContent}</td>`;
     });
 
-    // Cumplimiento del año (cobrado / esperado YTD del cliente)
+    // Cumplimiento del año (cobrado / esperado YTD del cliente, desde mes_inicio)
     let esperadoYTDcli = 0;
-    for (let i = 0; i <= currentMonthIdx; i++) esperadoYTDcli += esperadoEnMes(c, MESES_ORDER[i]);
+    for (let i = MES_INICIO_IDX; i <= currentMonthIdx; i++) esperadoYTDcli += esperadoEnMes(c, MESES_ORDER[i]);
     let cobradoYTDcli = 0;
-    for (let i = 0; i <= currentMonthIdx; i++) cobradoYTDcli += cobrosEnMes(c, MESES_ORDER[i]);
+    for (let i = MES_INICIO_IDX; i <= currentMonthIdx; i++) cobradoYTDcli += cobrosEnMes(c, MESES_ORDER[i]);
     const pct = esperadoYTDcli > 0 ? Math.round(cobradoYTDcli / esperadoYTDcli * 100) : (cobradoYTDcli > 0 ? 100 : 0);
     const pctClass = pct >= 95 ? 'green' : (pct >= 70 ? 'amber' : 'red');
 
@@ -1609,7 +1694,8 @@ function renderTrackingTable(){
   // Fila TOTAL
   let totalCells = "";
   let totalCobradoMes = [], totalEsperadoMes = [];
-  MESES_ORDER.forEach((mes, idx) => {
+  MESES_ACTIVOS.forEach((mes, localIdx) => {
+    const idx = MES_INICIO_IDX + localIdx;
     let cob = 0, esp = 0;
     clientes.forEach(c => {
       cob += cobrosEnMes(c, mes);
@@ -1711,10 +1797,67 @@ async function fetchTipoCambio(){
   DATA.tipo_cambio_fuente = "valor por defecto (sin conexión)";
 }
 
+/* ─── ROUTING ENTRE PÁGINAS ───────────────────────────────────── */
+function switchPage(name){
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  const el = document.getElementById("page-" + name);
+  if (el) el.classList.add("active");
+
+  document.querySelectorAll(".nav-tab").forEach(t => {
+    t.classList.toggle("active", t.dataset.page === name);
+  });
+
+  // Actualizar hash sin disparar evento
+  if (location.hash !== "#" + name){
+    history.replaceState(null, "", "#" + name);
+  }
+
+  // Re-render charts cuando volvemos a Dashboard (Chart.js necesita un container visible)
+  if (name === "dashboard") setTimeout(() => renderChart(), 50);
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function initRouting(){
+  document.querySelectorAll(".nav-tab").forEach(t => {
+    t.addEventListener("click", () => switchPage(t.dataset.page));
+  });
+
+  // Cargar página inicial desde hash
+  const initial = (location.hash || "#dashboard").replace("#", "");
+  switchPage(["dashboard","tracking"].includes(initial) ? initial : "dashboard");
+
+  // Escuchar cambios de hash (back/forward del navegador)
+  window.addEventListener("hashchange", () => {
+    const target = (location.hash || "#dashboard").replace("#", "");
+    if (["dashboard","tracking"].includes(target)) switchPage(target);
+  });
+}
+
+/* Actualizar contador en navbar (cobros pendientes del mes actual) */
+function updateNavCount(){
+  const today = new Date();
+  const isThisYear = today.getFullYear() === DATA.ano_activo;
+  const currentMonthIdx = isThisYear ? today.getMonth() : 11;
+  const currentMonth = MESES_ORDER[currentMonthIdx];
+
+  let pendientes = 0;
+  DATA.clientes_recurrentes.filter(c => c.activo).forEach(c => {
+    const real = cobrosEnMes(c, currentMonth);
+    const esperado = esperadoEnMes(c, currentMonth);
+    if (esperado > 0 && real < esperado * 0.95) pendientes++;
+  });
+  const el = document.getElementById("navCountPending");
+  if (el) el.textContent = pendientes > 0 ? pendientes : "✓";
+}
+
 (async function init(){
   renderAll();           // pinta con el valor por defecto inmediatamente
+  initRouting();         // configura tabs y hash routing
+  updateNavCount();      // contador en el tab
   await fetchTipoCambio(); // actualiza si la API responde
   renderAll();           // repinta con el valor real
+  updateNavCount();
 
   // Refresca el "hace X tiempo" cada minuto sin recargar
   setInterval(() => {
