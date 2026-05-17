@@ -897,6 +897,50 @@
   .pct-pill.amber{ background: rgba(245,158,11,0.14); color: #fcd34d; }
   .pct-pill.red{ background: var(--red-soft); color: var(--red); }
 
+  /* ─── TOOLTIP custom ───────────────────────────────────────────── */
+  .tooltip-wrap{ position: relative; }
+  .tooltip-wrap[data-tooltip]:hover::after{
+    content: attr(data-tooltip);
+    position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20,20,18,0.98);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: var(--r-sm);
+    padding: 8px 12px;
+    font-family: var(--font-mono); font-size: 10px;
+    font-weight: 500; letter-spacing: 0.02em;
+    white-space: pre-line; line-height: 1.5;
+    box-shadow: 0 8px 24px -6px rgba(0,0,0,0.7);
+    z-index: 10;
+    pointer-events: none;
+    text-transform: none;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    min-width: 140px; text-align: left;
+    animation: tooltip-fade 160ms var(--ease-out);
+  }
+  .tooltip-wrap[data-tooltip]:hover::before{
+    content: '';
+    position: absolute; bottom: calc(100% + 2px); left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(255,255,255,0.16);
+    z-index: 10; pointer-events: none;
+  }
+  @keyframes tooltip-fade{
+    from{ opacity: 0; transform: translateX(-50%) translateY(4px); }
+    to  { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+  /* En móvil tap = mostrar tooltip por 2s */
+  @media (max-width: 640px){
+    .tooltip-wrap[data-tooltip]:hover::after,
+    .tooltip-wrap[data-tooltip]:focus::after,
+    .tooltip-wrap[data-tooltip]:active::after{
+      font-size: 11px !important;
+    }
+  }
+
   @media (max-width: 640px){
     .tracking-summary{ grid-template-columns: 1fr !important; gap: 8px !important; }
     .tracking-summary .item{ padding: 12px 14px !important; }
@@ -1655,18 +1699,27 @@ function renderTrackingTable(){
       totalEsperado += est.esperado;
 
       let cellContent = '';
+      const mesLabel = mes.charAt(0).toUpperCase() + mes.slice(1);
+      const faltante = est.esperado - est.real;
+
       if (est.tipo === 'future' && est.esperado > 0){
-        cellContent = `<span class="tracking-cell future"><span class="amount-mini">${fmt(est.esperado)}</span></span>`;
+        const tip = `${c.nombre}\n${mesLabel} ${DATA.ano_activo}\n──────────────\nProyectado: ${fmt(est.esperado)}`;
+        cellContent = `<span class="tracking-cell future tooltip-wrap" data-tooltip="${tip}"><span class="amount-mini">${fmt(est.esperado)}</span></span>`;
       } else if (est.tipo === 'future'){
         cellContent = `<span class="tracking-cell future">—</span>`;
       } else if (est.tipo === 'na'){
         cellContent = `<span style="color: var(--text-4);">—</span>`;
       } else if (est.tipo === 'pending'){
-        cellContent = `<span class="tracking-cell pending">○<span class="amount-mini">${fmt(est.esperado)}</span></span>`;
+        const tip = `${c.nombre}\n${mesLabel} ${DATA.ano_activo}\n──────────────\nEsperado: ${fmt(est.esperado)}\nPagado: $0.00\nPendiente: ${fmt(est.esperado)}`;
+        cellContent = `<span class="tracking-cell pending tooltip-wrap" data-tooltip="${tip}">○<span class="amount-mini">${fmt(est.esperado)}</span></span>`;
       } else if (est.tipo === 'paid'){
-        cellContent = `<span class="tracking-cell paid">✓<span class="amount-mini">${fmt(est.real)}</span></span>`;
+        const tip = est.esperado > 0
+          ? `${c.nombre}\n${mesLabel} ${DATA.ano_activo}\n──────────────\nEsperado: ${fmt(est.esperado)}\nPagado: ${fmt(est.real)}${est.real > est.esperado ? '\nExtra: ' + fmt(est.real - est.esperado) : '\nCumplido ✓'}`
+          : `${c.nombre}\n${mesLabel} ${DATA.ano_activo}\n──────────────\nPagado: ${fmt(est.real)}`;
+        cellContent = `<span class="tracking-cell paid tooltip-wrap" data-tooltip="${tip}">✓<span class="amount-mini">${fmt(est.real)}</span></span>`;
       } else if (est.tipo === 'partial'){
-        cellContent = `<span class="tracking-cell partial">!<span class="amount-mini">${fmt(est.real)}</span></span>`;
+        const tip = `${c.nombre}\n${mesLabel} ${DATA.ano_activo}\n──────────────\nEsperado: ${fmt(est.esperado)}\nPagado: ${fmt(est.real)}\nFaltante: ${fmt(faltante)}`;
+        cellContent = `<span class="tracking-cell partial tooltip-wrap" data-tooltip="${tip}">!<span class="amount-mini">${fmt(est.real)}</span></span>`;
       }
       cells += `<td class="cell">${cellContent}</td>`;
     });
