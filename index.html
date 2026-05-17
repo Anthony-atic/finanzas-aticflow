@@ -736,6 +736,130 @@
     letter-spacing: 0.08em; text-transform: uppercase;
   }
 
+  /* ─── SEGUIMIENTO DE COBROS ──────────────────────────────────── */
+  .tracking-section{ margin-bottom: 28px; }
+  .tracking-summary{
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-bottom: 18px;
+  }
+  .tracking-summary .item{
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--r-md);
+    padding: 14px 16px;
+  }
+  .tracking-summary .item .lbl{
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-3); margin-bottom: 8px;
+  }
+  .tracking-summary .item .val{
+    font-family: var(--font-display); font-weight: 400;
+    font-size: 22px; letter-spacing: -0.02em; line-height: 1;
+  }
+  .tracking-summary .item .val.lime{ color: var(--lime); }
+  .tracking-summary .item .val.red{ color: var(--red); }
+  .tracking-summary .item .sub{
+    font-family: var(--font-mono); font-size: 9px;
+    color: var(--text-3); margin-top: 6px; letter-spacing: 0.02em;
+  }
+  .tracking-table-wrap{
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    border-radius: var(--r-md);
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.025);
+  }
+  .tracking-table-wrap::-webkit-scrollbar{ height: 6px; }
+  .tracking-table-wrap::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.1); border-radius: 3px; }
+  .tracking-table{
+    width: 100%; border-collapse: collapse; min-width: 800px;
+  }
+  .tracking-table th{
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-3); font-weight: 500;
+    padding: 12px 10px; text-align: left;
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0;
+    background: rgba(20,20,18,0.96); backdrop-filter: blur(8px);
+    z-index: 1;
+  }
+  .tracking-table th.month{ text-align: center; min-width: 70px; }
+  .tracking-table th.cliente{ min-width: 180px; position: sticky; left: 0; background: rgba(20,20,18,0.96); z-index: 2; }
+  .tracking-table td{
+    padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px; color: var(--text-2);
+    vertical-align: middle;
+  }
+  .tracking-table tr:last-child td{ border-bottom: none; }
+  .tracking-table tr:hover td{ background: rgba(255,255,255,0.02); }
+  .tracking-table td.cliente{
+    font-weight: 600; color: var(--text);
+    position: sticky; left: 0;
+    background: rgba(20,20,18,0.96);
+  }
+  .tracking-table td.cliente .servicio-tag{
+    display: block; font-family: var(--font-mono); font-size: 9px;
+    color: var(--text-3); margin-top: 3px; font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+  .tracking-table td.expected{
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--text-3); text-align: right; white-space: nowrap;
+  }
+  .tracking-table td.cell{
+    text-align: center; font-family: var(--font-mono);
+    font-size: 11px; padding: 8px 6px;
+  }
+  .tracking-cell{
+    display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 4px 8px; border-radius: 6px; min-width: 56px;
+  }
+  .tracking-cell.paid{
+    background: var(--lime-soft); color: var(--lime);
+  }
+  .tracking-cell.partial{
+    background: rgba(245,158,11,0.14); color: #fcd34d;
+  }
+  .tracking-cell.pending{
+    background: rgba(255,255,255,0.04); color: var(--text-4);
+  }
+  .tracking-cell.future{
+    color: var(--text-4);
+  }
+  .tracking-cell .check{
+    font-size: 13px; line-height: 1;
+  }
+  .tracking-cell .amount-mini{
+    font-size: 10px; font-feature-settings: "tnum";
+  }
+  .tracking-table tr.total-row td{
+    background: rgba(204,255,0,0.03);
+    font-weight: 600; color: var(--text);
+    border-top: 1px solid rgba(204,255,0,0.15);
+  }
+  .tracking-table td.cumplimiento{
+    text-align: center; font-family: var(--font-mono);
+    font-size: 11px; white-space: nowrap;
+  }
+  .pct-pill{
+    display: inline-block; padding: 3px 8px; border-radius: 999px;
+    font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+  }
+  .pct-pill.green{ background: var(--lime-soft); color: var(--lime); }
+  .pct-pill.amber{ background: rgba(245,158,11,0.14); color: #fcd34d; }
+  .pct-pill.red{ background: var(--red-soft); color: var(--red); }
+
+  @media (max-width: 640px){
+    .tracking-summary{ grid-template-columns: 1fr !important; gap: 8px !important; }
+    .tracking-summary .item{ padding: 12px 14px !important; }
+    .tracking-summary .item .val{ font-size: 18px !important; }
+    .tracking-table{ font-size: 12px !important; }
+    .tracking-table th, .tracking-table td{ padding: 8px 6px !important; }
+    .tracking-cell{ min-width: 48px !important; padding: 3px 5px !important; }
+    .tracking-cell .amount-mini{ font-size: 9px !important; }
+  }
+
   /* TAG */
   .tag-year{
     font-family: var(--font-mono); font-size: 10px;
@@ -777,6 +901,35 @@
     <span class="annual-meta" id="annualMeta">— meses con datos</span>
   </div>
   <div class="annual-kpis" id="annualKpis"></div>
+</div>
+
+<!-- SEGUIMIENTO DE COBROS RECURRENTES -->
+<div class="tracking-section">
+  <div class="card-header" style="margin-bottom: 14px;">
+    <div>
+      <span class="eyebrow">SEGUIMIENTO · COBROS RECURRENTES</span>
+      <h2 style="font-family: var(--font-body); font-weight: 700; font-size: 18px; letter-spacing: -0.012em; margin-top: 4px;">Pagos por cliente</h2>
+    </div>
+  </div>
+
+  <div class="tracking-summary" id="trackingSummary"></div>
+
+  <div class="tracking-table-wrap">
+    <table class="tracking-table">
+      <thead>
+        <tr>
+          <th class="cliente">Cliente</th>
+          <th style="text-align:right;">Esperado/mes</th>
+          <th class="month">ENE</th><th class="month">FEB</th><th class="month">MAR</th>
+          <th class="month">ABR</th><th class="month">MAY</th><th class="month">JUN</th>
+          <th class="month">JUL</th><th class="month">AGO</th><th class="month">SEP</th>
+          <th class="month">OCT</th><th class="month">NOV</th><th class="month">DIC</th>
+          <th style="text-align:center;">Cumplimiento</th>
+        </tr>
+      </thead>
+      <tbody id="trackingTableBody"></tbody>
+    </table>
+  </div>
 </div>
 
 <!-- SECTION DIVIDER -->
@@ -922,7 +1075,28 @@ const DATA = {
     "octubre":    { ingresos: [], egresos: [] },
     "noviembre":  { ingresos: [], egresos: [] },
     "diciembre":  { ingresos: [], egresos: [] },
-  }
+  },
+
+  /* ─── CLIENTES RECURRENTES ──────────────────────────────────────
+   * Cada entrada define un "concepto de cobro" recurrente.
+   * El matching se hace por vendor + (opcional) categoria.
+   * Para servicios uno-off por cuotas (implementación), usar plan_implementacion.
+   * ──────────────────────────────────────────────────────────── */
+  clientes_recurrentes: [
+    { id:"hima",          nombre:"Hima",                    servicio:"Marketing",       vendor:"Hima",          mensualidad: 54520,  activo:true },
+    { id:"rafael-mkt",    nombre:"Dr. Rafael · MKT",        servicio:"Marketing",       vendor:"Dr. Rafael",    categoria:"Estrategia MKT",         mensualidad:  7064,  activo:true },
+    { id:"rafael-ia",     nombre:"Dr. Rafael · IA Setup",   servicio:"Implementación",  vendor:"Dr. Rafael",    categoria:"Setup / Implementación", mensualidad: 0, activo:true,
+      plan_implementacion: { "abril": 5000, "mayo": 10000, "junio": 15000 },
+      nota: "3 cuotas (ABR/MAY/JUN). Después: $4,640 mensual IA mantenimiento." },
+    { id:"arturo-ia",     nombre:"Dr. Arturo · IA",         servicio:"Agentes IA",      vendor:"Dr. Arturo",    categoria:"Licencia mensual",       mensualidad:  4640,  activo:true },
+    { id:"arturo-mkt",    nombre:"Dr. Arturo · MKT",        servicio:"Marketing",       vendor:"Dr. Arturo",    categoria:"Estrategia MKT",         mensualidad:  6566,  activo:true },
+    { id:"kayros",        nombre:"Kayros",                  servicio:"IA + CRM",        vendor:"Kayros",        mensualidad:  3271,  activo:true },
+    { id:"velora",        nombre:"Velora",                  servicio:"Marketing",       vendor:"Velora",        mensualidad:  7165,  activo:true },
+    { id:"portfolio-oral",nombre:"Portfolio Oral",          servicio:"Marketing",       vendor:"Portfolio Oral",mensualidad:  2394,  activo:true },
+    { id:"karla-doncel",  nombre:"Karla Doncel",            servicio:"Implementación",  vendor:"Karla Doncel",  mensualidad: 0,  activo:true,
+      plan_implementacion: { "mayo": 30000, "julio": 15000, "agosto": 15000 },
+      nota: "3 pagos (MAY/JUL/AGO). Total $60,000 sin IVA." },
+  ],
 };
 </script>
 
@@ -1295,6 +1469,185 @@ function getLastUpdateString(){
   return "ÚLT. UPDATE — " + dd + " " + mm + " " + yyyy + " · " + hh + ":" + min + " · " + relative;
 }
 
+/* ─── SEGUIMIENTO DE COBROS ────────────────────────────────────── */
+
+/* Suma de cobros de un cliente en un mes específico (filtra por vendor + categoria opcional) */
+function cobrosEnMes(cliente, mes){
+  const data = DATA.meses[mes];
+  if (!data || !data.ingresos) return 0;
+  return data.ingresos
+    .filter(r => r.vendor === cliente.vendor)
+    .filter(r => !cliente.categoria || r.categoria === cliente.categoria)
+    .reduce((s, r) => s + r.monto, 0);
+}
+
+/* Esperado mensual: usa plan_implementacion si existe, sino mensualidad */
+function esperadoEnMes(cliente, mes){
+  if (cliente.plan_implementacion && cliente.plan_implementacion[mes] != null){
+    return cliente.plan_implementacion[mes];
+  }
+  return cliente.mensualidad || 0;
+}
+
+/* Estado de un cobro en un mes */
+function estadoCobro(cliente, mes, currentMonthIdx, monthIdx){
+  const real = cobrosEnMes(cliente, mes);
+  const esperado = esperadoEnMes(cliente, mes);
+
+  if (monthIdx > currentMonthIdx) return { tipo: 'future', real: 0, esperado };
+  if (real === 0 && esperado === 0) return { tipo: 'na', real: 0, esperado: 0 };
+  if (real === 0) return { tipo: 'pending', real: 0, esperado };
+  if (esperado === 0 && real > 0) return { tipo: 'paid', real, esperado: 0 };
+  if (real >= esperado * 0.95) return { tipo: 'paid', real, esperado };
+  return { tipo: 'partial', real, esperado };
+}
+
+function renderTrackingSummary(){
+  // Esperado total mensual estable (suma de mensualidades, sin contar plan_implementacion)
+  const esperadoMensualEstable = DATA.clientes_recurrentes
+    .filter(c => c.activo)
+    .reduce((s, c) => s + (c.mensualidad || 0), 0);
+
+  // Cobrado YTD
+  const cobradoYTD = DATA.clientes_recurrentes
+    .filter(c => c.activo)
+    .reduce((sum, c) => sum + MESES_ORDER.reduce((s, m) => s + cobrosEnMes(c, m), 0), 0);
+
+  // Esperado YTD (sumando mes a mes hasta el actual)
+  const today = new Date();
+  const isThisYear = today.getFullYear() === DATA.ano_activo;
+  const currentMonthIdx = isThisYear ? today.getMonth() : 11; // si es año pasado, todo el año
+  const esperadoYTD = DATA.clientes_recurrentes.filter(c => c.activo).reduce((sum, c) => {
+    let total = 0;
+    for (let i = 0; i <= currentMonthIdx; i++){
+      total += esperadoEnMes(c, MESES_ORDER[i]);
+    }
+    return sum + total;
+  }, 0);
+
+  const pendiente = esperadoYTD - cobradoYTD;
+  const proyeccionAnual = DATA.clientes_recurrentes.filter(c => c.activo).reduce((sum, c) => {
+    let total = 0;
+    for (const mes of MESES_ORDER) total += esperadoEnMes(c, mes);
+    return sum + total;
+  }, 0);
+
+  document.getElementById("trackingSummary").innerHTML = `
+    <div class="item">
+      <div class="lbl">PROYECCIÓN ANUAL</div>
+      <div class="val lime">${fmt(proyeccionAnual)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+      <div class="sub">${DATA.clientes_recurrentes.filter(c=>c.activo).length} clientes recurrentes</div>
+    </div>
+    <div class="item">
+      <div class="lbl">COBRADO YTD</div>
+      <div class="val">${fmt(cobradoYTD)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+      <div class="sub">vs ${fmt(esperadoYTD)} esperado · ${esperadoYTD > 0 ? Math.round(cobradoYTD/esperadoYTD*100) : 0}%</div>
+    </div>
+    <div class="item">
+      <div class="lbl">PENDIENTE YTD</div>
+      <div class="val ${pendiente > 0 ? 'red' : 'lime'}">${pendiente > 0 ? fmt(pendiente) : '$0'}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+      <div class="sub">${pendiente > 0 ? 'Cobranza por gestionar' : 'Al día'}</div>
+    </div>
+  `;
+}
+
+function renderTrackingTable(){
+  const today = new Date();
+  const isThisYear = today.getFullYear() === DATA.ano_activo;
+  const currentMonthIdx = isThisYear ? today.getMonth() : 11;
+
+  const tbody = document.getElementById("trackingTableBody");
+  const clientes = DATA.clientes_recurrentes.filter(c => c.activo);
+
+  let html = "";
+
+  // Filas por cliente
+  clientes.forEach(c => {
+    let totalCobrado = 0, totalEsperado = 0;
+    let cells = "";
+
+    MESES_ORDER.forEach((mes, idx) => {
+      const est = estadoCobro(c, mes, currentMonthIdx, idx);
+      totalCobrado += est.real;
+      totalEsperado += est.esperado;
+
+      let cellContent = '';
+      if (est.tipo === 'future' && est.esperado > 0){
+        cellContent = `<span class="tracking-cell future"><span class="amount-mini">${fmt(est.esperado)}</span></span>`;
+      } else if (est.tipo === 'future'){
+        cellContent = `<span class="tracking-cell future">—</span>`;
+      } else if (est.tipo === 'na'){
+        cellContent = `<span style="color: var(--text-4);">—</span>`;
+      } else if (est.tipo === 'pending'){
+        cellContent = `<span class="tracking-cell pending">○<span class="amount-mini">${fmt(est.esperado)}</span></span>`;
+      } else if (est.tipo === 'paid'){
+        cellContent = `<span class="tracking-cell paid">✓<span class="amount-mini">${fmt(est.real)}</span></span>`;
+      } else if (est.tipo === 'partial'){
+        cellContent = `<span class="tracking-cell partial">!<span class="amount-mini">${fmt(est.real)}</span></span>`;
+      }
+      cells += `<td class="cell">${cellContent}</td>`;
+    });
+
+    // Cumplimiento del año (cobrado / esperado YTD del cliente)
+    let esperadoYTDcli = 0;
+    for (let i = 0; i <= currentMonthIdx; i++) esperadoYTDcli += esperadoEnMes(c, MESES_ORDER[i]);
+    let cobradoYTDcli = 0;
+    for (let i = 0; i <= currentMonthIdx; i++) cobradoYTDcli += cobrosEnMes(c, MESES_ORDER[i]);
+    const pct = esperadoYTDcli > 0 ? Math.round(cobradoYTDcli / esperadoYTDcli * 100) : (cobradoYTDcli > 0 ? 100 : 0);
+    const pctClass = pct >= 95 ? 'green' : (pct >= 70 ? 'amber' : 'red');
+
+    html += `
+      <tr>
+        <td class="cliente">${c.nombre}<span class="servicio-tag">${c.servicio}</span></td>
+        <td class="expected">${c.mensualidad > 0 ? fmt(c.mensualidad) : '—'}</td>
+        ${cells}
+        <td class="cumplimiento"><span class="pct-pill ${pctClass}">${pct}%</span></td>
+      </tr>
+    `;
+  });
+
+  // Fila TOTAL
+  let totalCells = "";
+  let totalCobradoMes = [], totalEsperadoMes = [];
+  MESES_ORDER.forEach((mes, idx) => {
+    let cob = 0, esp = 0;
+    clientes.forEach(c => {
+      cob += cobrosEnMes(c, mes);
+      esp += esperadoEnMes(c, mes);
+    });
+    totalCobradoMes.push(cob);
+    totalEsperadoMes.push(esp);
+
+    if (idx > currentMonthIdx){
+      totalCells += `<td class="cell"><span class="amount-mini" style="color: var(--text-4);">${esp > 0 ? fmt(esp) : '—'}</span></td>`;
+    } else {
+      const pct = esp > 0 ? Math.round(cob/esp*100) : (cob > 0 ? 100 : 0);
+      const color = pct >= 95 ? 'var(--lime)' : (pct >= 70 ? '#fcd34d' : 'var(--text-3)');
+      totalCells += `<td class="cell"><span class="amount-mini" style="color: ${color}; font-weight: 600;">${fmt(cob)}</span></td>`;
+    }
+  });
+  const totalCobradoTot = totalCobradoMes.reduce((s,v)=>s+v,0);
+  const totalEsperadoTot = totalEsperadoMes.reduce((s,v)=>s+v,0);
+  const pctTotal = totalEsperadoTot > 0 ? Math.round(totalCobradoTot/totalEsperadoTot*100) : 0;
+  const pctClassTotal = pctTotal >= 95 ? 'green' : (pctTotal >= 70 ? 'amber' : 'red');
+
+  html += `
+    <tr class="total-row">
+      <td class="cliente" style="color: var(--lime);">TOTAL</td>
+      <td class="expected" style="color: var(--lime);">${fmt(clientes.reduce((s,c)=>s+(c.mensualidad||0),0))}</td>
+      ${totalCells}
+      <td class="cumplimiento"><span class="pct-pill ${pctClassTotal}">${pctTotal}%</span></td>
+    </tr>
+  `;
+
+  tbody.innerHTML = html;
+}
+
+function renderTracking(){
+  renderTrackingSummary();
+  renderTrackingTable();
+}
+
 function renderAll(){
   document.getElementById("yearTag").textContent = DATA.ano_activo;
   document.getElementById("lastUpdate").textContent = getLastUpdateString();
@@ -1310,6 +1663,7 @@ function renderAll(){
     activeMonthLabelEl.textContent = activeMonth.charAt(0).toUpperCase() + activeMonth.slice(1) + " " + DATA.ano_activo;
   }
   renderAnnualView();
+  renderTracking();
   renderMonthSelector();
   renderKPIs();
   renderChart();
