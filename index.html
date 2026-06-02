@@ -1240,7 +1240,7 @@ const DATA = {
     { id:"arturo-ia",     nombre:"Dr. Arturo · IA",         servicio:"Agentes IA",      vendor:"Dr. Arturo",    categoria:"Licencia mensual",       mensualidad:  4640.00,  activo:true },
     { id:"arturo-mkt",    nombre:"Dr. Arturo · MKT",        servicio:"Marketing",       vendor:"Dr. Arturo",    categoria:"Estrategia MKT",         mensualidad:  6565.60,  activo:true },
     { id:"kayros",        nombre:"Kayros",                  servicio:"IA + CRM",        vendor:"Kayros",        mensualidad:  1597.70,  activo:true },
-    { id:"velora",        nombre:"Velora",                  servicio:"Marketing",       vendor:"Velora",        mensualidad:  7165,  activo:true },
+    { id:"velora",        nombre:"Velora",                  servicio:"Marketing",       vendor:"Velora",        mensualidad:  7165,  activo:true, mes_fin: "mayo", nota: "Relación finalizada en mayo 2026" },
     { id:"portfolio-oral",nombre:"Portfolio Oral",          servicio:"Marketing",       vendor:"Portfolio Oral",mensualidad:  2394,  activo:true },
     { id:"karla-doncel",  nombre:"Karla Doncel",            servicio:"Implementación",  vendor:"Karla Doncel",  mensualidad: 0,  activo:true,
       plan_implementacion: { "mayo": 30000, "junio": 15000, "julio": 15000 },
@@ -1644,6 +1644,12 @@ function cobrosEnMes(cliente, mes){
 
 /* Esperado mensual: usa plan_implementacion si existe, sino mensualidad */
 function esperadoEnMes(cliente, mes){
+  // Si el cliente tiene mes_fin, no esperar cobros después de ese mes
+  if (cliente.mes_fin){
+    const idxFin = MESES_ORDER.indexOf(cliente.mes_fin);
+    const idxMes = MESES_ORDER.indexOf(mes);
+    if (idxMes > idxFin) return 0;
+  }
   if (cliente.plan_implementacion && cliente.plan_implementacion[mes] != null){
     return cliente.plan_implementacion[mes];
   }
