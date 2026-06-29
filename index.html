@@ -1216,7 +1216,11 @@ const DATA = {
       ]
     },
     "junio": {
-      ingresos: [],
+      ingresos: [
+        { vendor: "Dr. Rafael",     cuenta: "AGENTES IA", categoria: "Setup / Implementación", monto: 17400.00, txs: 1, detalle: "3er pago implementación IA ($15,000 + IVA) - 15/06" },
+        { vendor: "Portfolio Oral", cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  2420.36, txs: 1, detalle: "MKT junio (06/06)" },
+        { vendor: "Kayros",         cuenta: "AGENTES IA", categoria: "Licencia mensual",       monto:  1598.78, txs: 1, detalle: "WhatsApp + CRM junio (06/06)" },
+      ],
       egresos: [
         { vendor: "Anthropic",      cuenta: "HERRAMIENTAS DIGITALES IA",           categoria: "SOFTWARE",         monto:   786.04, txs: 1, detalle: "Claude API (01/06)" },
       ]
@@ -1246,8 +1250,8 @@ const DATA = {
     { id:"velora",        nombre:"Velora",                  servicio:"Marketing",       vendor:"Velora",        mensualidad:  7165,  activo:true, mes_fin: "mayo", nota: "Relación finalizada en mayo 2026" },
     { id:"portfolio-oral",nombre:"Portfolio Oral",          servicio:"Marketing",       vendor:"Portfolio Oral",mensualidad:  2394,  activo:true },
     { id:"karla-doncel",  nombre:"Karla Doncel",            servicio:"Implementación",  vendor:"Karla Doncel",  mensualidad: 0,  activo:true,
-      plan_implementacion: { "mayo": 30000, "junio": 15000, "julio": 15000 },
-      nota: "3 pagos (MAY/JUN/JUL). Total $60,000 sin IVA." },
+      plan_implementacion: { "mayo": 30000, "agosto": 15000, "septiembre": 15000 },
+      nota: "3 pagos (MAY/AGO/SEP). Total $60,000 sin IVA." },
   ],
 };
 </script>
