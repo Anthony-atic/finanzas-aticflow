@@ -1476,6 +1476,10 @@ function renderChart(){
   const ingresos = MESES_ACTIVOS.map(m => monthTotals(m).ingresos);
   const egresos = MESES_ACTIVOS.map(m => monthTotals(m).egresos);
   const saldo = MESES_ACTIVOS.map(m => monthTotals(m).saldo);
+  // Saldo acumulado (flujo de caja)
+  const saldoAcumulado = [];
+  let acc = 0;
+  MESES_ACTIVOS.forEach(m => { acc += monthTotals(m).saldo; saldoAcumulado.push(acc); });
 
   const isMobile = window.innerWidth <= 640;
   if (chart) chart.destroy();
@@ -1505,18 +1509,35 @@ function renderChart(){
           order: 2,
         },
         {
-          label: 'Saldo neto',
+          label: 'Saldo neto mensual',
           data: saldo,
           type: 'line',
-          borderColor: '#FAFAFA',
+          borderColor: 'rgba(250,250,250,0.5)',
           backgroundColor: 'rgba(250,250,250,0)',
-          borderWidth: 2,
+          borderWidth: 1.5,
+          borderDash: [4, 4],
           tension: 0.35,
-          pointRadius: 4,
-          pointHoverRadius: 6,
-          pointBackgroundColor: '#FAFAFA',
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          pointBackgroundColor: 'rgba(250,250,250,0.7)',
+          pointBorderColor: '#000',
+          pointBorderWidth: 1,
+          order: 2,
+        },
+        {
+          label: 'Flujo de caja (acumulado)',
+          data: saldoAcumulado,
+          type: 'line',
+          borderColor: '#CCFF00',
+          backgroundColor: 'rgba(204,255,0,0.10)',
+          borderWidth: 3,
+          tension: 0.35,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          pointBackgroundColor: '#CCFF00',
           pointBorderColor: '#000',
           pointBorderWidth: 2,
+          fill: true,
           order: 1,
         }
       ]
