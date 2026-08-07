@@ -2042,7 +2042,7 @@ function renderColab(){
   const nc = DATA.nueva_colab;
   if (!nc) return;
 
-  // Calcular totales de ingresos
+  // Cálculos
   let aticflowNeto = 0, aticDirecto = 0, aticIva = 0;
   nc.ingresos_por_cliente.forEach(c => {
     aticflowNeto += c.aticflow || 0;
@@ -2053,120 +2053,158 @@ function renderColab(){
   const aticflowFinal = aticflowNeto - treinta;
   const aticTotal = aticDirecto + aticIva + treinta;
 
-  // Gastos
   const totalGastosAticflow = nc.gastos_aticflow.reduce((s,g) => s + g.monto, 0);
   const totalGastosAtic = nc.gastos_atic.reduce((s,g) => s + g.monto, 0);
 
   const netoAtic = aticTotal - totalGastosAtic;
   const netoAticflow = aticflowFinal - totalGastosAticflow;
 
-  // Tarjeta ATIC
-  document.getElementById("colabAtic").innerHTML = `
-    <div class="tracking-summary" style="grid-template-columns: 1fr;">
-      <div class="item">
-        <div class="lbl">INGRESOS TOTALES</div>
-        <div class="val lime">${fmt(aticTotal)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-        <div class="sub">Directo ${fmt(aticDirecto)} + IVA ${fmt(aticIva)} + 30% de ATICFLOW ${fmt(treinta)}</div>
-      </div>
-      <div class="item">
-        <div class="lbl">GASTOS TOTALES</div>
-        <div class="val red">${fmt(totalGastosAtic)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-        <div class="sub">${nc.gastos_atic.length} conceptos estimados</div>
-      </div>
-      <div class="item" style="background: ${netoAtic>=0?'var(--lime-soft)':'var(--red-soft)'}; border-color: ${netoAtic>=0?'var(--lime-soft-strong)':'rgba(239,68,68,.2)'}">
-        <div class="lbl">UTILIDAD DISPONIBLE</div>
-        <div class="val ${netoAtic>=0?'lime':'red'}">${fmt(netoAtic)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-        <div class="sub">Para decidir salarios Marcos+Ignacio, Anthony y reserva</div>
-      </div>
-    </div>
-  `;
-
-  // Tarjeta ATICFLOW
-  document.getElementById("colabAticflow").innerHTML = `
-    <div class="tracking-summary" style="grid-template-columns: 1fr;">
-      <div class="item">
-        <div class="lbl">INGRESOS (70% NETO)</div>
-        <div class="val lime">${fmt(aticflowFinal)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-        <div class="sub">De ${fmt(aticflowNeto)} netos, ${fmt(treinta)} transferidos a ATIC</div>
-      </div>
-      <div class="item">
-        <div class="lbl">GASTOS TOTALES</div>
-        <div class="val red">${fmt(totalGastosAticflow)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-        <div class="sub">${nc.gastos_aticflow.length} conceptos estimados</div>
-      </div>
-      <div class="item" style="background: ${netoAticflow>=0?'var(--lime-soft)':'var(--red-soft)'}; border-color: ${netoAticflow>=0?'var(--lime-soft-strong)':'rgba(239,68,68,.2)'}">
-        <div class="lbl">NETO ATICFLOW</div>
-        <div class="val ${netoAticflow>=0?'lime':'red'}">${fmt(netoAticflow)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-        <div class="sub">Utilidad neta mensual</div>
-      </div>
-    </div>
-  `;
-
-  // Tabla ingresos por cliente
-  const tbody = document.getElementById("colabIngresosTable");
-  let html = "";
-  let totBruto = 0, totAF = 0, totAD = 0, totIVA = 0;
+  // ═══════════ SECCIÓN 1: Facturación ATICFLOW por cliente ═══════════
+  let tabla1 = '<table class="movs-table"><thead><tr><th>Cliente</th><th>Concepto</th><th style="text-align:right;">Factura ATICFLOW</th></tr></thead><tbody>';
   nc.ingresos_por_cliente.forEach(c => {
-    const bruto = c.aticflow + c.atic_directo + c.iva;
-    totBruto += bruto; totAF += c.aticflow; totAD += c.atic_directo; totIVA += c.iva;
-    html += `<tr>
-      <td class="cliente">${c.cliente}<div style="color: var(--text-3); font-size: 10px; margin-top: 2px;">${c.tipo}</div></td>
-      <td style="color: var(--text-3); font-size: 11px;">${c.nota || '—'}</td>
-      <td class="amount">${fmt(bruto)}</td>
-      <td class="amount" style="color: #60a5fa;">${c.aticflow > 0 ? fmt(c.aticflow) : '—'}</td>
-      <td class="amount income">${c.atic_directo > 0 ? fmt(c.atic_directo) : '—'}</td>
-      <td class="amount" style="color: var(--amber);">${c.iva > 0 ? fmt(c.iva) : '—'}</td>
-    </tr>`;
+    if (c.aticflow > 0) {
+      tabla1 += `<tr><td><strong>${c.cliente}</strong></td><td style="color:var(--text-3);font-size:11px;">${c.tipo}</td><td class="amount income">${fmt(c.aticflow)}</td></tr>`;
+    }
   });
-  html += `<tr class="total-row">
-    <td class="cliente" style="color: var(--lime);">TOTAL</td>
-    <td></td>
-    <td class="amount" style="color: var(--lime);">${fmt(totBruto)}</td>
-    <td class="amount" style="color: #60a5fa;">${fmt(totAF)}</td>
-    <td class="amount income">${fmt(totAD)}</td>
-    <td class="amount" style="color: var(--amber);">${fmt(totIVA)}</td>
-  </tr>`;
-  tbody.innerHTML = html;
+  tabla1 += `<tr class="total-row"><td style="color:var(--lime);"><strong>TOTAL FACTURADO</strong></td><td></td><td class="amount" style="color:var(--lime);">${fmt(aticflowNeto)}</td></tr></tbody></table>`;
 
-  // Gastos ATIC
-  let gAtic = '<thead><tr><th>Concepto</th><th style="text-align:right;">Monto</th></tr></thead><tbody>';
-  nc.gastos_atic.forEach(g => {
-    gAtic += `<tr><td>${g.concepto}${g.nota ? '<div style="color:var(--text-3);font-size:10px;">' + g.nota + '</div>' : ''}</td><td class="amount expense">${fmt(g.monto)}</td></tr>`;
-  });
-  gAtic += `<tr class="total-row"><td style="color:var(--lime);">TOTAL</td><td class="amount" style="color:var(--red);">${fmt(totalGastosAtic)}</td></tr></tbody>`;
-  document.getElementById("colabGastosAtic").innerHTML = gAtic;
+  // ═══════════ SECCIÓN 2: División 70/30 ═══════════
+  const div = `
+    <div class="tracking-summary" style="grid-template-columns: 1fr 1fr;">
+      <div class="item" style="background: rgba(96,165,250,0.10); border-color: rgba(96,165,250,0.3);">
+        <div class="lbl">SE QUEDA ATICFLOW (70%)</div>
+        <div class="val" style="color:#60a5fa;">${fmt(aticflowFinal)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+        <div class="sub">De ${fmt(aticflowNeto)} facturados</div>
+      </div>
+      <div class="item" style="background: var(--lime-soft); border-color: var(--lime-soft-strong);">
+        <div class="lbl">SE TRANSFIERE A ATIC (30%)</div>
+        <div class="val lime">${fmt(treinta)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+        <div class="sub">30% del facturado va a ATIC</div>
+      </div>
+    </div>`;
 
-  // Gastos ATICFLOW
-  let gAF = '<thead><tr><th>Concepto</th><th style="text-align:right;">Monto</th></tr></thead><tbody>';
+  // ═══════════ SECCIÓN 3: Gastos ATICFLOW ═══════════
+  let gAF = '<table class="movs-table"><thead><tr><th>Concepto</th><th style="text-align:right;">Monto</th></tr></thead><tbody>';
   nc.gastos_aticflow.forEach(g => {
     gAF += `<tr><td>${g.concepto}</td><td class="amount expense">${fmt(g.monto)}</td></tr>`;
   });
-  gAF += `<tr class="total-row"><td style="color:var(--lime);">TOTAL</td><td class="amount" style="color:var(--red);">${fmt(totalGastosAticflow)}</td></tr></tbody>`;
-  document.getElementById("colabGastosAticflow").innerHTML = gAF;
+  gAF += `<tr class="total-row"><td style="color:var(--red);"><strong>TOTAL GASTOS ATICFLOW</strong></td><td class="amount" style="color:var(--red);">${fmt(totalGastosAticflow)}</td></tr></tbody></table>`;
 
-  // Consolidado
-  const ingresosTotales = aticTotal + aticflowFinal;
-  const gastosTotales = totalGastosAtic + totalGastosAticflow;
-  const utilidadCombinada = ingresosTotales - gastosTotales;
-  document.getElementById("colabConsolidado").innerHTML = `
-    <div class="tracking-summary">
-      <div class="item">
-        <div class="lbl">INGRESOS COMBINADOS</div>
-        <div class="val lime">${fmt(ingresosTotales)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-        <div class="sub">ATIC ${fmt(aticTotal)} + ATICFLOW ${fmt(aticflowFinal)}</div>
+  // ═══════════ SECCIÓN 4: Utilidad ATICFLOW ═══════════
+  const util_af = `
+    <div class="tracking-summary" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="item"><div class="lbl">INGRESOS</div><div class="val" style="color:#60a5fa;">${fmt(aticflowFinal)}</div></div>
+      <div class="item"><div class="lbl">GASTOS</div><div class="val red">${fmt(totalGastosAticflow)}</div></div>
+      <div class="item" style="background: ${netoAticflow>=0?'var(--lime-soft)':'var(--red-soft)'}; border-color: ${netoAticflow>=0?'var(--lime-soft-strong)':'rgba(239,68,68,.2)'};">
+        <div class="lbl">UTILIDAD ATICFLOW</div>
+        <div class="val ${netoAticflow>=0?'lime':'red'}">${fmt(netoAticflow)}</div>
       </div>
-      <div class="item">
-        <div class="lbl">GASTOS COMBINADOS</div>
-        <div class="val red">${fmt(gastosTotales)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-        <div class="sub">Sin salarios de Marcos/Ignacio/Anthony (aún por definir)</div>
+    </div>`;
+
+  // ═══════════ SECCIÓN 5: Ingresos ATIC (todas las fuentes) ═══════════
+  let tabla_atic_ing = '<table class="movs-table"><thead><tr><th>Fuente</th><th>Detalle</th><th style="text-align:right;">Monto</th></tr></thead><tbody>';
+  tabla_atic_ing += `<tr><td><strong>30% de ATICFLOW</strong></td><td style="color:var(--text-3);font-size:11px;">Transferencia desde ATICFLOW</td><td class="amount income">${fmt(treinta)}</td></tr>`;
+  nc.ingresos_por_cliente.forEach(c => {
+    if (c.atic_directo > 0) {
+      tabla_atic_ing += `<tr><td><strong>${c.cliente}</strong></td><td style="color:var(--text-3);font-size:11px;">${c.tipo} (directo ATIC)</td><td class="amount income">${fmt(c.atic_directo)}</td></tr>`;
+    }
+    if (c.iva > 0) {
+      tabla_atic_ing += `<tr><td>${c.cliente}</td><td style="color:var(--text-3);font-size:11px;">IVA de ${c.tipo}</td><td class="amount" style="color:var(--amber);">${fmt(c.iva)}</td></tr>`;
+    }
+  });
+  tabla_atic_ing += `<tr class="total-row"><td style="color:var(--lime);"><strong>TOTAL INGRESOS ATIC</strong></td><td></td><td class="amount" style="color:var(--lime);">${fmt(aticTotal)}</td></tr></tbody></table>`;
+
+  // ═══════════ SECCIÓN 6: Gastos ATIC ═══════════
+  let gAtic = '<table class="movs-table"><thead><tr><th>Concepto</th><th style="text-align:right;">Monto</th></tr></thead><tbody>';
+  nc.gastos_atic.forEach(g => {
+    gAtic += `<tr><td>${g.concepto}${g.nota ? '<div style="color:var(--text-3);font-size:10px;">' + g.nota + '</div>' : ''}</td><td class="amount expense">${fmt(g.monto)}</td></tr>`;
+  });
+  gAtic += `<tr class="total-row"><td style="color:var(--red);"><strong>TOTAL GASTOS ATIC</strong></td><td class="amount" style="color:var(--red);">${fmt(totalGastosAtic)}</td></tr></tbody></table>`;
+
+  // ═══════════ SECCIÓN 7: Utilidad ATIC ═══════════
+  const util_atic = `
+    <div class="tracking-summary" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="item"><div class="lbl">INGRESOS</div><div class="val lime">${fmt(aticTotal)}</div></div>
+      <div class="item"><div class="lbl">GASTOS</div><div class="val red">${fmt(totalGastosAtic)}</div></div>
+      <div class="item" style="background: ${netoAtic>=0?'var(--lime-soft)':'var(--red-soft)'}; border-color: ${netoAtic>=0?'var(--lime-soft-strong)':'rgba(239,68,68,.2)'};">
+        <div class="lbl">UTILIDAD ATIC</div>
+        <div class="val ${netoAtic>=0?'lime':'red'}">${fmt(netoAtic)}</div>
       </div>
-      <div class="item" style="background: var(--lime-soft); border-color: var(--lime-soft-strong)">
-        <div class="lbl">UTILIDAD COMBINADA</div>
-        <div class="val lime">${fmt(utilidadCombinada)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-        <div class="sub">Antes de decidir salarios pendientes</div>
+    </div>`;
+
+  // Insertar todo en la página
+  const html = `
+    <!-- Paso 1 -->
+    <div class="card">
+      <div class="card-header">
+        <h2>1️⃣ Facturación ATICFLOW por cliente</h2>
+        <span class="label">MENSUAL PROYECTADO</span>
       </div>
+      <p style="color:var(--text-3); font-size: 12px; margin-bottom: 14px;">Lo que cada cliente le paga a ATICFLOW (montos netos, sin IVA)</p>
+      ${tabla1}
+    </div>
+
+    <!-- Paso 2 -->
+    <div class="card" style="margin-top: 20px;">
+      <div class="card-header">
+        <h2>2️⃣ División del facturado: 70% ATICFLOW · 30% ATIC</h2>
+      </div>
+      ${div}
+    </div>
+
+    <!-- Paso 3 -->
+    <div class="card" style="margin-top: 20px;">
+      <div class="card-header">
+        <h2>3️⃣ Gastos de ATICFLOW</h2>
+      </div>
+      ${gAF}
+    </div>
+
+    <!-- Paso 4 -->
+    <div class="card" style="margin-top: 20px;">
+      <div class="card-header">
+        <h2>4️⃣ Utilidad de ATICFLOW</h2>
+      </div>
+      ${util_af}
+    </div>
+
+    <!-- Paso 5 -->
+    <div class="card" style="margin-top: 40px;">
+      <div class="card-header">
+        <h2>5️⃣ Ingresos de ATIC (todas las fuentes)</h2>
+      </div>
+      <p style="color:var(--text-3); font-size: 12px; margin-bottom: 14px;">30% de ATICFLOW + servicios que se cobran directamente a ATIC + IVA</p>
+      ${tabla_atic_ing}
+    </div>
+
+    <!-- Paso 6 -->
+    <div class="card" style="margin-top: 20px;">
+      <div class="card-header">
+        <h2>6️⃣ Gastos de ATIC</h2>
+      </div>
+      ${gAtic}
+    </div>
+
+    <!-- Paso 7 -->
+    <div class="card" style="margin-top: 20px;">
+      <div class="card-header">
+        <h2>7️⃣ Utilidad de ATIC</h2>
+      </div>
+      ${util_atic}
     </div>
   `;
+
+  // Reemplazar todo el contenido de #page-colab (después del title-row)
+  const pageColab = document.getElementById("page-colab");
+  const titleRow = pageColab.querySelector(".title-row");
+  // Limpiar todo lo que hay después del title-row
+  let next = titleRow.nextElementSibling;
+  while (next) {
+    const toRemove = next;
+    next = next.nextElementSibling;
+    toRemove.remove();
+  }
+  titleRow.insertAdjacentHTML('afterend', html);
 }
 
 function renderAll(){
