@@ -2063,7 +2063,7 @@ function renderColab(){
   let tabla1 = '<table class="movs-table"><thead><tr><th>Cliente</th><th>Concepto</th><th style="text-align:right;">Factura ATICFLOW</th></tr></thead><tbody>';
   nc.ingresos_por_cliente.forEach(c => {
     if (c.aticflow > 0) {
-      tabla1 += `<tr><td><strong>${c.cliente}</strong></td><td style="color:var(--text-3);font-size:11px;">${c.tipo}</td><td class="amount income">${fmt(c.aticflow)}</td></tr>`;
+      tabla1 += `<tr><td><strong>${c.cliente}</strong></td><td style="color:var(--text-3);font-size:11px;">${c.tipo}</td><td class="amount" style="color:var(--lime);">${fmt(c.aticflow)}</td></tr>`;
     }
   });
   tabla1 += `<tr class="total-row"><td style="color:var(--lime);"><strong>TOTAL FACTURADO</strong></td><td></td><td class="amount" style="color:var(--lime);">${fmt(aticflowNeto)}</td></tr></tbody></table>`;
@@ -2071,14 +2071,14 @@ function renderColab(){
   // ═══════════ SECCIÓN 2: División 70/30 ═══════════
   const div = `
     <div class="tracking-summary" style="grid-template-columns: 1fr 1fr;">
-      <div class="item" style="background: rgba(96,165,250,0.10); border-color: rgba(96,165,250,0.3);">
+      <div class="item" style="background: var(--lime-soft); border-color: var(--lime-soft-strong);">
         <div class="lbl">SE QUEDA ATICFLOW (70%)</div>
-        <div class="val" style="color:#60a5fa;">${fmt(aticflowFinal)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+        <div class="val lime">${fmt(aticflowFinal)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
         <div class="sub">De ${fmt(aticflowNeto)} facturados</div>
       </div>
-      <div class="item" style="background: var(--lime-soft); border-color: var(--lime-soft-strong);">
+      <div class="item" style="background: rgba(96,165,250,0.10); border-color: rgba(96,165,250,0.3);">
         <div class="lbl">SE TRANSFIERE A ATIC (30%)</div>
-        <div class="val lime">${fmt(treinta)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
+        <div class="val" style="color:#60a5fa;">${fmt(treinta)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
         <div class="sub">30% del facturado va a ATIC</div>
       </div>
     </div>`;
@@ -2093,7 +2093,7 @@ function renderColab(){
   // ═══════════ SECCIÓN 4: Utilidad ATICFLOW ═══════════
   const util_af = `
     <div class="tracking-summary" style="grid-template-columns: 1fr 1fr 1fr;">
-      <div class="item"><div class="lbl">INGRESOS</div><div class="val" style="color:#60a5fa;">${fmt(aticflowFinal)}</div></div>
+      <div class="item"><div class="lbl">INGRESOS</div><div class="val lime">${fmt(aticflowFinal)}</div></div>
       <div class="item"><div class="lbl">GASTOS</div><div class="val red">${fmt(totalGastosAticflow)}</div></div>
       <div class="item" style="background: ${netoAticflow>=0?'var(--lime-soft)':'var(--red-soft)'}; border-color: ${netoAticflow>=0?'var(--lime-soft-strong)':'rgba(239,68,68,.2)'};">
         <div class="lbl">UTILIDAD ATICFLOW</div>
@@ -2103,16 +2103,16 @@ function renderColab(){
 
   // ═══════════ SECCIÓN 5: Ingresos ATIC (todas las fuentes) ═══════════
   let tabla_atic_ing = '<table class="movs-table"><thead><tr><th>Fuente</th><th>Detalle</th><th style="text-align:right;">Monto</th></tr></thead><tbody>';
-  tabla_atic_ing += `<tr><td><strong>30% de ATICFLOW</strong></td><td style="color:var(--text-3);font-size:11px;">Transferencia desde ATICFLOW</td><td class="amount income">${fmt(treinta)}</td></tr>`;
+  tabla_atic_ing += `<tr><td><strong>30% de ATICFLOW</strong></td><td style="color:var(--text-3);font-size:11px;">Transferencia desde ATICFLOW</td><td class="amount" style="color:#60a5fa;">${fmt(treinta)}</td></tr>`;
   nc.ingresos_por_cliente.forEach(c => {
     if (c.atic_directo > 0) {
-      tabla_atic_ing += `<tr><td><strong>${c.cliente}</strong></td><td style="color:var(--text-3);font-size:11px;">${c.tipo} (directo ATIC)</td><td class="amount income">${fmt(c.atic_directo)}</td></tr>`;
+      tabla_atic_ing += `<tr><td><strong>${c.cliente}</strong></td><td style="color:var(--text-3);font-size:11px;">${c.tipo} (directo ATIC)</td><td class="amount" style="color:#60a5fa;">${fmt(c.atic_directo)}</td></tr>`;
     }
     if (c.iva > 0) {
       tabla_atic_ing += `<tr><td>${c.cliente}</td><td style="color:var(--text-3);font-size:11px;">IVA de ${c.tipo}</td><td class="amount" style="color:var(--amber);">${fmt(c.iva)}</td></tr>`;
     }
   });
-  tabla_atic_ing += `<tr class="total-row"><td style="color:var(--lime);"><strong>TOTAL INGRESOS ATIC</strong></td><td></td><td class="amount" style="color:var(--lime);">${fmt(aticTotal)}</td></tr></tbody></table>`;
+  tabla_atic_ing += `<tr class="total-row"><td style="color:#60a5fa;"><strong>TOTAL INGRESOS ATIC</strong></td><td></td><td class="amount" style="color:#60a5fa;">${fmt(aticTotal)}</td></tr></tbody></table>`;
 
   // ═══════════ SECCIÓN 6: Gastos ATIC ═══════════
   let gAtic = '<table class="movs-table"><thead><tr><th>Concepto</th><th style="text-align:right;">Monto</th></tr></thead><tbody>';
@@ -2124,11 +2124,11 @@ function renderColab(){
   // ═══════════ SECCIÓN 7: Utilidad ATIC ═══════════
   const util_atic = `
     <div class="tracking-summary" style="grid-template-columns: 1fr 1fr 1fr;">
-      <div class="item"><div class="lbl">INGRESOS</div><div class="val lime">${fmt(aticTotal)}</div></div>
+      <div class="item"><div class="lbl">INGRESOS</div><div class="val" style="color:#60a5fa;">${fmt(aticTotal)}</div></div>
       <div class="item"><div class="lbl">GASTOS</div><div class="val red">${fmt(totalGastosAtic)}</div></div>
-      <div class="item" style="background: ${netoAtic>=0?'var(--lime-soft)':'var(--red-soft)'}; border-color: ${netoAtic>=0?'var(--lime-soft-strong)':'rgba(239,68,68,.2)'};">
+      <div class="item" style="background: ${netoAtic>=0?'rgba(96,165,250,0.10)':'var(--red-soft)'}; border-color: ${netoAtic>=0?'rgba(96,165,250,0.3)':'rgba(239,68,68,.2)'};">
         <div class="lbl">UTILIDAD ATIC</div>
-        <div class="val ${netoAtic>=0?'lime':'red'}">${fmt(netoAtic)}</div>
+        <div class="val" style="color:${netoAtic>=0?'#60a5fa':'var(--red)'};">${fmt(netoAtic)}</div>
       </div>
     </div>`;
 
