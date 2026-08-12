@@ -1226,7 +1226,7 @@ const DATA = {
     "abril": {
       ingresos: [
         { vendor: "Hima",        cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto: 54520.00, txs: 1, detalle: "Desarrollo inmobiliario: MKT + CRM" },
-        { vendor: "Dr. Rafael",  cuenta: "AGENTES IA", categoria: "Setup / Implementación", monto:  5000.00, txs: 1, detalle: "Estética: 1er pago de 3 (implementación IA)" },
+        { vendor: "Dr. Rafael",  cuenta: "AGENTES IA", categoria: "Licencia mensual"       , monto:  5000.00, txs: 1, detalle: "Estética: 1er pago de 3 (implementación IA)" },
         { vendor: "Dr. Rafael",  cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  7064.40, txs: 1, detalle: "Estética: Estrategia MKT" },
         { vendor: "Dr. Arturo",  cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  6565.15, txs: 1, detalle: "Ginecología: Estrategia MKT (no hubo IA en abril)" },
         { vendor: "Kayros",      cuenta: "AGENTES IA", categoria: "Licencia mensual",       monto:  3271.09, txs: 1, detalle: "Inmobiliario: WhatsApp + CRM" },
@@ -1253,8 +1253,8 @@ const DATA = {
     },
     "mayo": {
       ingresos: [
-        { vendor: "Dr. Rafael",     cuenta: "AGENTES IA", categoria: "Setup / Implementación", monto: 10000.00, txs: 1, detalle: "2do pago implementación Agente IA" },
-        { vendor: "Dr. Rafael",     cuenta: "AGENTES IA", categoria: "Setup / Implementación", monto:  1600.00, txs: 1, detalle: "Complemento IVA mayo (SPEI 18/05 10:26 - Rafael Villagrana Pacheco)" },
+        { vendor: "Dr. Rafael",     cuenta: "AGENTES IA", categoria: "Licencia mensual"      , monto: 10000.00, txs: 1, detalle: "2do pago implementación Agente IA" },
+        { vendor: "Dr. Rafael",     cuenta: "AGENTES IA", categoria: "Licencia mensual"      , monto:  1600.00, txs: 1, detalle: "Complemento IVA mayo (SPEI 18/05 10:26 - Rafael Villagrana Pacheco)" },
         { vendor: "Velora",         cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  7165.18, txs: 1, detalle: "Pago vía Stripe — Marketing" },
         { vendor: "Dr. Arturo",     cuenta: "AGENTES IA", categoria: "Licencia mensual",       monto:  4640.00, txs: 1, detalle: "Mensualidad IA ($4,000 + IVA) — vía transferencia" },
         { vendor: "Portfolio Oral", cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  2393.79, txs: 1, detalle: "Pago vía Stripe — Marketing" },
@@ -1296,7 +1296,7 @@ const DATA = {
     "junio": {
       ingresos: [
         { vendor: "Hima",           cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto: 54520.00, txs: 1, detalle: "Desarrollo inmobiliario: MKT + CRM junio" },
-        { vendor: "Dr. Rafael",     cuenta: "AGENTES IA", categoria: "Setup / Implementación", monto: 17400.00, txs: 1, detalle: "3er pago implementación IA ($15,000 + IVA) - 15/06" },
+        { vendor: "Dr. Rafael",     cuenta: "AGENTES IA", categoria: "Licencia mensual"      , monto: 17400.00, txs: 1, detalle: "3er pago implementación IA ($15,000 + IVA) - 15/06" },
         { vendor: "Dr. Rafael",     cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  7064.40, txs: 1, detalle: "Estética: Estrategia MKT junio (29/06)" },
         { vendor: "Dr. Arturo",     cuenta: "AGENTES IA", categoria: "Licencia mensual",       monto:  4640.00, txs: 1, detalle: "Ginecología: Mensualidad IA junio (30/06)" },
         { vendor: "Dr. Arturo",     cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  6726.84, txs: 1, detalle: "Ginecología: MKT junio + ajuste ($5,660 + IVA + $161)" },
@@ -1439,7 +1439,7 @@ const DATA = {
   clientes_recurrentes: [
     { id:"hima",          nombre:"Hima",                    servicio:"Marketing",       vendor:"Hima",          mensualidad: 54520,  activo:true },
     { id:"rafael-mkt",    nombre:"Dr. Rafael · MKT",        servicio:"Marketing",       vendor:"Dr. Rafael",    categoria:"Estrategia MKT",         mensualidad:  7064.40,  activo:true },
-    { id:"rafael-ia",     nombre:"Dr. Rafael · IA",         servicio:"Setup → Mensualidad",  vendor:"Dr. Rafael",    categoria:"Setup / Implementación", mensualidad: 4640.00, activo:true,
+    { id:"rafael-ia",     nombre:"Dr. Rafael · IA",         servicio:"Setup → Mensualidad",  vendor:"Dr. Rafael",    categoria:"Licencia mensual", mensualidad: 4640.00, activo:true,
       plan_implementacion: { "abril": 5000.00, "mayo": 11600.00, "junio": 17400.00 },
       nota: "3 cuotas setup. MAY: $10,000 + IVA = $11,600. JUN: $15,000 + IVA = $17,400. A partir de JUL: $4,000 + IVA = $4,640 mensual." },
     { id:"arturo-ia",     nombre:"Dr. Arturo · IA",         servicio:"Agentes IA",      vendor:"Dr. Arturo",    categoria:"Licencia mensual",       mensualidad:  4640.00,  activo:true },
