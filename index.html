@@ -1385,7 +1385,40 @@ const DATA = {
         { vendor: "IVA Comisión Santander", cuenta: "OPERACIÓN (SALARIOS Y GASTOS FIJOS)", categoria: "COMISIONES BANCARIAS", monto: 40.00, txs: 1, detalle: "IVA de comisión membresía (31/07)",         banco: "Santander" },
       ]
     },
-    "agosto":     { ingresos: [], egresos: [] },
+    "agosto": {
+      ingresos: [],
+      egresos: [
+        // ─── Salarios julio pagados en agosto ───
+        { vendor: "Marcos + Ignacio", cuenta: "OPERACIÓN (SALARIOS Y GASTOS FIJOS)", categoria: "SALARIOS",      monto: 28645.81, txs: 1, detalle: "Salario Marcos + Ignacio julio (03/08)" },
+        { vendor: "Anthony",        cuenta: "OPERACIÓN (SALARIOS Y GASTOS FIJOS)", categoria: "SALARIOS",         monto: 20852.28, txs: 1, detalle: "Salario Anthony julio (03/08)" },
+        { vendor: "Marcos + Ignacio", cuenta: "OPERACIÓN (SALARIOS Y GASTOS FIJOS)", categoria: "SALARIOS",      monto: 11219.52, txs: 1, detalle: "Avance salario agosto Marcos (05/08)" },
+        { vendor: "Jared",          cuenta: "OPERACIÓN (SALARIOS Y GASTOS FIJOS)", categoria: "SALARIOS",         monto:  7775.23, txs: 1, detalle: "Salario Jared julio (05/08)" },
+        // ─── Contabilidad ───
+        { vendor: "Contador",       cuenta: "OPERACIÓN (SALARIOS Y GASTOS FIJOS)", categoria: "CONTABILIDAD",     monto:  1600.00, txs: 1, detalle: "Pago mensual contador agosto (06/08)" },
+        // ─── Software IA (Anthropic) ───
+        { vendor: "Anthropic Claude Sub", cuenta: "HERRAMIENTAS DIGITALES IA",     categoria: "SOFTWARE",         monto:  3465.76, txs: 1, detalle: "Suscripción Claude (02/08, USD $200)" },
+        { vendor: "Anthropic",      cuenta: "HERRAMIENTAS DIGITALES IA",           categoria: "SOFTWARE",         monto:  3107.90, txs: 4, detalle: "Claude API - 4 cargos (01,03,07,12/08) USD $180 aprox" },
+        { vendor: "Anthropic Claude Sub", cuenta: "HERRAMIENTAS DIGITALES IA",     categoria: "SOFTWARE",         monto:   372.40, txs: 1, detalle: "Suscripción Claude (07/08, BRL $110)" },
+        // ─── Software / SaaS ───
+        { vendor: "GoHighLevel",    cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:  1696.73, txs: 1, detalle: "GOGHL (08/08, USD $99)" },
+        { vendor: "GoHighLevel",    cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:  1131.15, txs: 1, detalle: "GOGHL (08/08, USD $66)" },
+        { vendor: "SiteGround",     cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:  2096.46, txs: 1, detalle: "Hosting (01/08, USD $120.79)" },
+        { vendor: "GitHub",         cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:  1250.97, txs: 1, detalle: "Suscripción (03/08, USD $72.19)" },
+        { vendor: "HeyGen",         cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:   846.31, txs: 1, detalle: "HeyGen Technology (06/08, USD $49)" },
+        { vendor: "Notion",         cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:   715.71, txs: 1, detalle: "Productividad (09/08, USD $41.76)" },
+        { vendor: "Supabase",       cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:   428.47, txs: 1, detalle: "Base de datos (11/08, USD $25)" },
+        { vendor: "HostGator",      cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:   351.25, txs: 1, detalle: "Hosting (02/08)" },
+        { vendor: "Vercel",         cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:   346.58, txs: 1, detalle: "Hosting (02/08, USD $20)" },
+        { vendor: "Netlify",        cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:   346.58, txs: 1, detalle: "Hosting (01/08, USD $20)" },
+        { vendor: "Captions.AI",    cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:   269.31, txs: 1, detalle: "Captions.AI (06/08, BRL $79.55)" },
+        { vendor: "Twilio",         cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:   262.43, txs: 1, detalle: "Comunicaciones (07/08, USD $15.24)" },
+        { vendor: "HighLevel",      cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:   173.29, txs: 1, detalle: "HighLevel (02/08, USD $10)" },
+        { vendor: "STR*TODODEIA",   cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:  1499.00, txs: 1, detalle: "STR*TODODEIA (01/08) - verificar concepto" },
+        // ─── Transferencias sin destinatario claro ───
+        { vendor: "Transferencia",  cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:   111.00, txs: 1, detalle: "Transferencia enviada (10/08) - verificar destinatario" },
+        { vendor: "Transferencia",  cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:   102.00, txs: 1, detalle: "Transferencia enviada (10/08) - verificar destinatario" },
+      ]
+    },
     "septiembre": { ingresos: [], egresos: [] },
     "octubre":    { ingresos: [], egresos: [] },
     "noviembre":  { ingresos: [], egresos: [] },
