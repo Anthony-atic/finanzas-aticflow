@@ -1219,6 +1219,7 @@ const DATA = {
   ano_activo: 2026,
   mes_inicio: "abril",  // primer mes del negocio (oculta meses anteriores en vistas y gráficas)
   ultima_actualizacion: "16 MAY 2026",
+  saldo_real_banco: 19801.21,  // Saldo real acumulado en cuentas bancarias (Nu + Santander). Actualizar manualmente.
   meses: {
     "enero":      { ingresos: [], egresos: [] },
     "febrero":    { ingresos: [], egresos: [] },
@@ -1591,9 +1592,14 @@ function renderAnnualView(){
       <div class="a-usd">${fmtUSD(totalEgr)}</div>
     </div>
     <div class="annual-kpi highlight ${saldo < 0 ? 'negative' : ''}">
-      <div class="a-label">SALDO ACUMULADO</div>
+      <div class="a-label">SALDO CALCULADO</div>
       <div class="a-value">${saldo >= 0 ? fmt(saldo) : '(' + fmt(Math.abs(saldo)) + ')'}<span class="a-currency">MXN</span></div>
       <div class="a-usd">${fmtUSD(saldo)}</div>
+    </div>
+    <div class="annual-kpi">
+      <div class="a-label">SALDO REAL BANCO</div>
+      <div class="a-value" style="color:#60a5fa;">${fmt(DATA.saldo_real_banco || 0)}<span class="a-currency">MXN</span></div>
+      <div class="a-usd">${(() => { const dif = (DATA.saldo_real_banco || 0) - saldo; return `Dif ${dif >= 0 ? '+' : ''}${fmt(dif)}`; })()}</div>
     </div>
     <div class="annual-kpi ${margen < 0 ? 'negative' : ''}">
       <div class="a-label">MARGEN</div>
