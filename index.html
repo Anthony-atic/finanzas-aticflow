@@ -1118,75 +1118,11 @@
      ═══════════════════════════════════════════════════════════════ -->
 <div class="page" id="page-colab">
   <div class="title-row">
-    <div class="eyebrow">MODELO PROYECTADO · APLICA DESDE AGOSTO 2026</div>
+    <div class="eyebrow">TRANSFERENCIA A ATIC · AGOSTO 2026</div>
     <h1>Nueva <span style="color: var(--lime);">Colaboración</span>.</h1>
-    <p>División ATIC (Marketing + IA) y ATICFLOW (gestión interna) con la regla del 30% + IVA + servicios directos.</p>
+    <p>Detalle de ingresos cobrados, gastos ATIC pagados desde ATICFLOW y transferencia neta a hacer.</p>
   </div>
-
-  <!-- Resumen 2 empresas -->
-  <div class="two-col" style="margin-bottom: 24px;">
-    <div class="card">
-      <div class="card-header">
-        <h2 style="color: var(--lime);">🟢 ATIC</h2>
-        <span class="label">MENSUAL PROYECTADO</span>
-      </div>
-      <div id="colabAtic"></div>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        <h2 style="color: #60a5fa;">🔵 ATICFLOW</h2>
-        <span class="label">MENSUAL PROYECTADO</span>
-      </div>
-      <div id="colabAticflow"></div>
-    </div>
-  </div>
-
-  <!-- Desglose ingresos por cliente -->
-  <div class="card">
-    <div class="card-header">
-      <h2>Ingresos por cliente · desglose</h2>
-      <span class="label">DÓNDE VA CADA PAGO</span>
-    </div>
-    <div class="tracking-table-wrap">
-      <table class="tracking-table">
-        <thead>
-          <tr>
-            <th class="cliente">Cliente</th>
-            <th>Concepto</th>
-            <th style="text-align:right;">Bruto</th>
-            <th style="text-align:right;">→ ATICFLOW (neto)</th>
-            <th style="text-align:right;">→ ATIC directo</th>
-            <th style="text-align:right;">→ ATIC IVA</th>
-          </tr>
-        </thead>
-        <tbody id="colabIngresosTable"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Desglose gastos -->
-  <div class="two-col" style="margin-top: 20px;">
-    <div class="card">
-      <div class="card-header">
-        <h2>Gastos ATIC · agosto (estimado)</h2>
-      </div>
-      <table class="movs-table" id="colabGastosAtic"></table>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        <h2>Gastos ATICFLOW · agosto (estimado)</h2>
-      </div>
-      <table class="movs-table" id="colabGastosAticflow"></table>
-    </div>
-  </div>
-
-  <!-- Total combinado -->
-  <div class="card" style="margin-top: 20px;">
-    <div class="card-header">
-      <h2>Consolidado ambas empresas</h2>
-    </div>
-    <div id="colabConsolidado"></div>
-  </div>
+  <div id="colabContent"></div>
 </div>
 
 <!-- FOOTER -->
@@ -1406,6 +1342,8 @@ const DATA = {
         { vendor: "Canva",          cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:   485.29, txs: 1, detalle: "Canva (25/08, BRL $147)" },
         { vendor: "JIM.COM Marcos Gaston", cuenta: "HERRAMIENTAS DIGITALES",       categoria: "SOFTWARE",         monto:   209.55, txs: 1, detalle: "JIM.COM (27/08, BRL $63.49)" },
         { vendor: "WIX",            cuenta: "HERRAMIENTAS DIGITALES",              categoria: "SOFTWARE",         monto:    98.87, txs: 1, detalle: "WIX (21/08, BRL $30)" },
+        // ─── Transferencia neta a ATIC (agosto) ───
+        { vendor: "Transferencia ATIC (neta)", cuenta: "TRANSFERENCIA A ATIC",             categoria: "TRANSFERENCIA INTER-EMPRESA", monto: 13669.29, txs: 1, detalle: "Transferencia neta agosto: bruto ATIC $27,269.73 - gastos ATIC $13,600.44 (sin Arturo, sin Kayros)" },
         // ─── Gastos PERSONALES (reembolsar) ───
         { vendor: "Transferencia Personal", cuenta: "PERSONAL",                          categoria: "PERSONAL",         monto:   111.00, txs: 1, detalle: "Transferencia personal (10/08) - reembolsar" },
         { vendor: "Transferencia Personal", cuenta: "PERSONAL",                          categoria: "PERSONAL",         monto:   102.00, txs: 1, detalle: "Transferencia personal (10/08) - reembolsar" },
@@ -2117,172 +2055,132 @@ function renderTracking(){
 }
 
 function renderColab(){
-  const nc = DATA.nueva_colab;
-  if (!nc) return;
+  // ═════════ REAL AGOSTO 2026 ═════════
+  // Ingresos ATICFLOW cobrados (netos que le corresponden)
+  const cobrado = [
+    { cliente: "Hima",           mkt: 30000.00, ia: 0,       crm_atic: 7000.00, iva: 5920.00, estado: "cobrado" },
+    { cliente: "Dr. Rafael",     mkt:  6090.00, ia: 4000.00, crm_atic: 0,       iva: 1614.40, estado: "cobrado" },
+    { cliente: "Portfolio Oral", mkt:  2361.10, ia: 0,       crm_atic: 0,       iva: 0,       estado: "cobrado" },
+    { cliente: "Dr. Arturo",     mkt:  5660.00, ia: 4000.00, crm_atic: 0,       iva: 1545.60, estado: "pendiente" },
+    { cliente: "Kayros",         mkt: 0,        ia: 0,       crm_atic: 1597.70, iva: 0,       estado: "pendiente" },
+  ];
+  const PCT = 0.30;
 
-  // Cálculos
-  let aticflowNeto = 0, aticDirecto = 0, aticIva = 0;
-  nc.ingresos_por_cliente.forEach(c => {
-    aticflowNeto += c.aticflow || 0;
-    aticDirecto += c.atic_directo || 0;
-    aticIva += c.iva || 0;
+  // Gastos ATIC pagados desde Nu ATICFLOW en agosto
+  const gastosAtic = [
+    { concepto: "Anthropic Claude Sub USD $200",  monto: 3465.76 },
+    { concepto: "Anthropic Claude Sub STR*TODODEIA", monto: 1499.00 },
+    { concepto: "GOGHL (USD $99)",                monto: 1696.73 },
+    { concepto: "GOGHL (USD $66)",                monto: 1131.15 },
+    { concepto: "SiteGround (50% ATIC)",          monto: 1048.23 },
+    { concepto: "GitHub",                         monto: 1250.97 },
+    { concepto: "Supabase",                       monto:  428.47 },
+    { concepto: "HostGator",                      monto:  351.25 },
+    { concepto: "Vercel",                         monto:  346.58 },
+    { concepto: "Netlify",                        monto:  346.58 },
+    { concepto: "Twilio",                         monto:  262.43 },
+    { concepto: "HighLevel",                      monto:  173.29 },
+    { concepto: "Contador",                       monto: 1600.00 },
+  ];
+
+  // ─── Cálculos con lo COBRADO ───
+  const cobradoOK = cobrado.filter(c => c.estado === "cobrado");
+  const netoAticflow = cobradoOK.reduce((s,c) => s + c.mkt + c.ia, 0);
+  const treinta = netoAticflow * PCT;
+  const totalIVA = cobradoOK.reduce((s,c) => s + c.iva, 0);
+  const totalDirectos = cobradoOK.reduce((s,c) => s + c.crm_atic, 0);
+  const brutoAtic = treinta + totalIVA + totalDirectos;
+  const gastosAticTotal = gastosAtic.reduce((s,g) => s + g.monto, 0);
+  const transferenciaNeta = brutoAtic - gastosAticTotal;
+
+  // ─── Cálculos con Arturo + Kayros PROYECTADO ───
+  const netoAticflowProy = cobrado.reduce((s,c) => s + c.mkt + c.ia, 0);
+  const treintaProy = netoAticflowProy * PCT;
+  const totalIVAProy = cobrado.reduce((s,c) => s + c.iva, 0);
+  const totalDirectosProy = cobrado.reduce((s,c) => s + c.crm_atic, 0);
+  const brutoAticProy = treintaProy + totalIVAProy + totalDirectosProy;
+  const transferenciaProy = brutoAticProy - gastosAticTotal;
+
+  // ─── SECCIÓN 1: Ingresos cobrados por cliente ───
+  let tablaCobros = '<table class="movs-table"><thead><tr><th>Cliente</th><th>Estado</th><th style="text-align:right;">MKT ATICFLOW</th><th style="text-align:right;">IA ATICFLOW</th><th style="text-align:right;">CRM ATIC</th><th style="text-align:right;">IVA ATIC</th><th style="text-align:right;">Total</th></tr></thead><tbody>';
+  cobrado.forEach(c => {
+    const total = c.mkt + c.ia + c.crm_atic + c.iva;
+    const badge = c.estado === "cobrado" ? '<span style="color:var(--lime);font-size:10px;">✓ COBRADO</span>' : '<span style="color:var(--amber);font-size:10px;">◯ PENDIENTE</span>';
+    tablaCobros += `<tr><td><strong>${c.cliente}</strong></td><td>${badge}</td><td class="amount ${c.mkt>0?'income':''}">${c.mkt>0?fmt(c.mkt):'—'}</td><td class="amount ${c.ia>0?'income':''}">${c.ia>0?fmt(c.ia):'—'}</td><td class="amount" style="${c.crm_atic>0?'color:#60a5fa;':''}">${c.crm_atic>0?fmt(c.crm_atic):'—'}</td><td class="amount" style="${c.iva>0?'color:var(--amber);':''}">${c.iva>0?fmt(c.iva):'—'}</td><td class="amount"><strong>${fmt(total)}</strong></td></tr>`;
   });
-  const treinta = aticflowNeto * nc.porcentaje_atic_de_aticflow;
-  const aticflowFinal = aticflowNeto - treinta;
-  const aticTotal = aticDirecto + aticIva + treinta;
+  tablaCobros += '</tbody></table>';
 
-  const totalGastosAticflow = nc.gastos_aticflow.reduce((s,g) => s + g.monto, 0);
-  const totalGastosAtic = nc.gastos_atic.reduce((s,g) => s + g.monto, 0);
-
-  const netoAtic = aticTotal - totalGastosAtic;
-  const netoAticflow = aticflowFinal - totalGastosAticflow;
-
-  // ═══════════ SECCIÓN 1: Facturación ATICFLOW por cliente ═══════════
-  let tabla1 = '<table class="movs-table"><thead><tr><th>Cliente</th><th>Concepto</th><th style="text-align:right;">Factura ATICFLOW</th></tr></thead><tbody>';
-  nc.ingresos_por_cliente.forEach(c => {
-    if (c.aticflow > 0) {
-      tabla1 += `<tr><td><strong>${c.cliente}</strong></td><td style="color:var(--text-3);font-size:11px;">${c.tipo}</td><td class="amount" style="color:var(--lime);">${fmt(c.aticflow)}</td></tr>`;
-    }
-  });
-  tabla1 += `<tr class="total-row"><td style="color:var(--lime);"><strong>TOTAL FACTURADO</strong></td><td></td><td class="amount" style="color:var(--lime);">${fmt(aticflowNeto)}</td></tr></tbody></table>`;
-
-  // ═══════════ SECCIÓN 2: División 70/30 ═══════════
-  const div = `
-    <div class="tracking-summary" style="grid-template-columns: 1fr 1fr;">
+  // ─── SECCIÓN 2: Desglose 3 fuentes ATIC (cobrado) ───
+  const cards3 = `
+    <div class="tracking-summary" style="grid-template-columns: 1fr 1fr 1fr;">
       <div class="item" style="background: var(--lime-soft); border-color: var(--lime-soft-strong);">
-        <div class="lbl">SE QUEDA ATICFLOW (70%)</div>
-        <div class="val lime">${fmt(aticflowFinal)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-        <div class="sub">De ${fmt(aticflowNeto)} facturados</div>
+        <div class="lbl">30% ATICFLOW</div>
+        <div class="val lime">${fmt(treinta)}</div>
+        <div class="sub">30% de ${fmt(netoAticflow)} cobrado</div>
+      </div>
+      <div class="item" style="background: rgba(245,158,11,0.10); border-color: rgba(245,158,11,0.3);">
+        <div class="lbl">IVA COBRADO</div>
+        <div class="val" style="color: var(--amber);">${fmt(totalIVA)}</div>
+        <div class="sub">IVA de Hima + Rafael</div>
       </div>
       <div class="item" style="background: rgba(96,165,250,0.10); border-color: rgba(96,165,250,0.3);">
-        <div class="lbl">SE TRANSFIERE A ATIC (30%)</div>
-        <div class="val" style="color:#60a5fa;">${fmt(treinta)}<span style="font-size:11px; color: var(--text-3); margin-left:4px;">MXN</span></div>
-        <div class="sub">30% del facturado va a ATIC</div>
+        <div class="lbl">DIRECTOS COBRADOS</div>
+        <div class="val" style="color: #60a5fa;">${fmt(totalDirectos)}</div>
+        <div class="sub">CRM Hima ($7k) + Kayros pendiente</div>
       </div>
     </div>`;
 
-  // ═══════════ SECCIÓN 3: Gastos ATICFLOW ═══════════
-  let gAF = '<table class="movs-table"><thead><tr><th>Concepto</th><th style="text-align:right;">Monto</th></tr></thead><tbody>';
-  nc.gastos_aticflow.forEach(g => {
-    gAF += `<tr><td>${g.concepto}</td><td class="amount expense">${fmt(g.monto)}</td></tr>`;
+  // ─── SECCIÓN 3: Gastos ATIC pagados desde Nu ─── 
+  let tablaGastos = '<table class="movs-table"><thead><tr><th>Concepto</th><th style="text-align:right;">Monto</th></tr></thead><tbody>';
+  gastosAtic.forEach(g => {
+    tablaGastos += `<tr><td>${g.concepto}</td><td class="amount expense">${fmt(g.monto)}</td></tr>`;
   });
-  gAF += `<tr class="total-row"><td style="color:var(--red);"><strong>TOTAL GASTOS ATICFLOW</strong></td><td class="amount" style="color:var(--red);">${fmt(totalGastosAticflow)}</td></tr></tbody></table>`;
+  tablaGastos += `<tr class="total-row"><td style="color:var(--red);"><strong>TOTAL GASTOS ATIC</strong></td><td class="amount" style="color:var(--red);">${fmt(gastosAticTotal)}</td></tr></tbody></table>`;
 
-  // ═══════════ SECCIÓN 4: Utilidad ATICFLOW ═══════════
-  const util_af = `
-    <div class="tracking-summary" style="grid-template-columns: 1fr 1fr 1fr;">
-      <div class="item"><div class="lbl">INGRESOS</div><div class="val lime">${fmt(aticflowFinal)}</div></div>
-      <div class="item"><div class="lbl">GASTOS</div><div class="val red">${fmt(totalGastosAticflow)}</div></div>
-      <div class="item" style="background: ${netoAticflow>=0?'var(--lime-soft)':'var(--red-soft)'}; border-color: ${netoAticflow>=0?'var(--lime-soft-strong)':'rgba(239,68,68,.2)'};">
-        <div class="lbl">UTILIDAD ATICFLOW</div>
-        <div class="val ${netoAticflow>=0?'lime':'red'}">${fmt(netoAticflow)}</div>
+  // ─── SECCIÓN 4: Cálculo transferencia neta ───
+  const transferBox = `
+    <div class="tracking-summary" style="grid-template-columns: 1fr 1fr;">
+      <div class="item" style="background: rgba(220,38,38,0.05); border-color: rgba(220,38,38,0.2);">
+        <div class="lbl">HOY · CON LO COBRADO</div>
+        <div class="val" style="color: ${transferenciaNeta>=0?'var(--lime)':'var(--red)'}; font-size:26px;">${fmt(transferenciaNeta)}</div>
+        <div class="sub">Bruto ${fmt(brutoAtic)} - Gastos ${fmt(gastosAticTotal)}</div>
+      </div>
+      <div class="item" style="background: var(--lime-soft); border-color: var(--lime);">
+        <div class="lbl">SI ARTURO + KAYROS PAGAN</div>
+        <div class="val lime" style="font-size:26px;">${fmt(transferenciaProy)}</div>
+        <div class="sub">Bruto proyectado ${fmt(brutoAticProy)}</div>
       </div>
     </div>`;
 
-  // ═══════════ SECCIÓN 5: Ingresos ATIC (todas las fuentes) ═══════════
-  let tabla_atic_ing = '<table class="movs-table"><thead><tr><th>Fuente</th><th>Detalle</th><th style="text-align:right;">Monto</th></tr></thead><tbody>';
-  tabla_atic_ing += `<tr><td><strong>30% de ATICFLOW</strong></td><td style="color:var(--text-3);font-size:11px;">Transferencia desde ATICFLOW</td><td class="amount" style="color:#60a5fa;">${fmt(treinta)}</td></tr>`;
-  nc.ingresos_por_cliente.forEach(c => {
-    if (c.atic_directo > 0) {
-      tabla_atic_ing += `<tr><td><strong>${c.cliente}</strong></td><td style="color:var(--text-3);font-size:11px;">${c.tipo} (directo ATIC)</td><td class="amount" style="color:#60a5fa;">${fmt(c.atic_directo)}</td></tr>`;
-    }
-    if (c.iva > 0) {
-      tabla_atic_ing += `<tr><td>${c.cliente}</td><td style="color:var(--text-3);font-size:11px;">IVA de ${c.tipo}</td><td class="amount" style="color:var(--amber);">${fmt(c.iva)}</td></tr>`;
-    }
-  });
-  tabla_atic_ing += `<tr class="total-row"><td style="color:#60a5fa;"><strong>TOTAL INGRESOS ATIC</strong></td><td></td><td class="amount" style="color:#60a5fa;">${fmt(aticTotal)}</td></tr></tbody></table>`;
-
-  // ═══════════ SECCIÓN 6: Gastos ATIC ═══════════
-  let gAtic = '<table class="movs-table"><thead><tr><th>Concepto</th><th style="text-align:right;">Monto</th></tr></thead><tbody>';
-  nc.gastos_atic.forEach(g => {
-    gAtic += `<tr><td>${g.concepto}${g.nota ? '<div style="color:var(--text-3);font-size:10px;">' + g.nota + '</div>' : ''}</td><td class="amount expense">${fmt(g.monto)}</td></tr>`;
-  });
-  gAtic += `<tr class="total-row"><td style="color:var(--red);"><strong>TOTAL GASTOS ATIC</strong></td><td class="amount" style="color:var(--red);">${fmt(totalGastosAtic)}</td></tr></tbody></table>`;
-
-  // ═══════════ SECCIÓN 7: Utilidad ATIC ═══════════
-  const util_atic = `
-    <div class="tracking-summary" style="grid-template-columns: 1fr 1fr 1fr;">
-      <div class="item"><div class="lbl">INGRESOS</div><div class="val" style="color:#60a5fa;">${fmt(aticTotal)}</div></div>
-      <div class="item"><div class="lbl">GASTOS</div><div class="val red">${fmt(totalGastosAtic)}</div></div>
-      <div class="item" style="background: ${netoAtic>=0?'rgba(96,165,250,0.10)':'var(--red-soft)'}; border-color: ${netoAtic>=0?'rgba(96,165,250,0.3)':'rgba(239,68,68,.2)'};">
-        <div class="lbl">UTILIDAD ATIC</div>
-        <div class="val" style="color:${netoAtic>=0?'#60a5fa':'var(--red)'};">${fmt(netoAtic)}</div>
-      </div>
-    </div>`;
-
-  // Insertar todo en la página
   const html = `
-    <!-- Paso 1 -->
-    <div class="card">
+    ${cards3}
+
+    <div class="card" style="margin-top: 32px;">
       <div class="card-header">
-        <h2>1️⃣ Facturación ATICFLOW por cliente</h2>
-        <span class="label">MENSUAL PROYECTADO</span>
+        <h2>1️⃣ Ingresos cobrados por cliente · agosto</h2>
       </div>
-      <p style="color:var(--text-3); font-size: 12px; margin-bottom: 14px;">Lo que cada cliente le paga a ATICFLOW (montos netos, sin IVA)</p>
-      ${tabla1}
+      <p style="color:var(--text-3); font-size: 12px; margin-bottom: 14px;">Desglose de lo recibido en cuenta ATICFLOW: MKT/IA netos + CRM directo ATIC + IVA</p>
+      ${tablaCobros}
     </div>
 
-    <!-- Paso 2 -->
     <div class="card" style="margin-top: 20px;">
       <div class="card-header">
-        <h2>2️⃣ División del facturado: 70% ATICFLOW · 30% ATIC</h2>
+        <h2>2️⃣ Gastos ATIC pagados desde Nu ATICFLOW · agosto</h2>
       </div>
-      ${div}
+      <p style="color:var(--text-3); font-size: 12px; margin-bottom: 14px;">Estos son los gastos que corresponden a ATIC pero se pagaron con la tarjeta Nu ATICFLOW. Se descuentan de la transferencia a ATIC.</p>
+      ${tablaGastos}
     </div>
 
-    <!-- Paso 3 -->
     <div class="card" style="margin-top: 20px;">
       <div class="card-header">
-        <h2>3️⃣ Gastos de ATICFLOW</h2>
+        <h2>3️⃣ Transferencia neta a hacer a ATIC</h2>
       </div>
-      ${gAF}
-    </div>
-
-    <!-- Paso 4 -->
-    <div class="card" style="margin-top: 20px;">
-      <div class="card-header">
-        <h2>4️⃣ Utilidad de ATICFLOW</h2>
-      </div>
-      ${util_af}
-    </div>
-
-    <!-- Paso 5 -->
-    <div class="card" style="margin-top: 40px;">
-      <div class="card-header">
-        <h2>5️⃣ Ingresos de ATIC (todas las fuentes)</h2>
-      </div>
-      <p style="color:var(--text-3); font-size: 12px; margin-bottom: 14px;">30% de ATICFLOW + servicios que se cobran directamente a ATIC + IVA</p>
-      ${tabla_atic_ing}
-    </div>
-
-    <!-- Paso 6 -->
-    <div class="card" style="margin-top: 20px;">
-      <div class="card-header">
-        <h2>6️⃣ Gastos de ATIC</h2>
-      </div>
-      ${gAtic}
-    </div>
-
-    <!-- Paso 7 -->
-    <div class="card" style="margin-top: 20px;">
-      <div class="card-header">
-        <h2>7️⃣ Utilidad de ATIC</h2>
-      </div>
-      ${util_atic}
+      <p style="color:var(--text-3); font-size: 12px; margin-bottom: 14px;">Ingresos ATIC (30% + IVA + directos) menos gastos ATIC ya pagados desde Nu.</p>
+      ${transferBox}
     </div>
   `;
 
-  // Reemplazar todo el contenido de #page-colab (después del title-row)
-  const pageColab = document.getElementById("page-colab");
-  const titleRow = pageColab.querySelector(".title-row");
-  // Limpiar todo lo que hay después del title-row
-  let next = titleRow.nextElementSibling;
-  while (next) {
-    const toRemove = next;
-    next = next.nextElementSibling;
-    toRemove.remove();
-  }
-  titleRow.insertAdjacentHTML('afterend', html);
+  document.getElementById("colabContent").innerHTML = html;
 }
 
 function renderAll(){
