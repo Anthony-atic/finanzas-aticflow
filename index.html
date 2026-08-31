@@ -1390,7 +1390,12 @@ const DATA = {
       ]
     },
     "agosto": {
-      ingresos: [],
+      ingresos: [
+        { vendor: "Hima",           cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto: 42920.00, txs: 1, detalle: "Hima MKT + CRM + IVA agosto (29/08). Nueva cuota: $30k MKT + $7k CRM + $5,920 IVA" },
+        { vendor: "Dr. Rafael",     cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  7064.40, txs: 1, detalle: "MKT agosto ($6,090 + IVA) - 28/08" },
+        { vendor: "Dr. Rafael",     cuenta: "AGENTES IA", categoria: "Licencia mensual",       monto:  4640.00, txs: 1, detalle: "IA agosto ($4,000 + IVA) - 28/08" },
+        { vendor: "Portfolio Oral", cuenta: "MARKETING",  categoria: "Estrategia MKT",         monto:  2361.10, txs: 1, detalle: "MKT agosto vía Stripe (14/08). Neto tras comisión" },
+      ],
       egresos: [
         // ─── Salario agosto (avance) ───
         { vendor: "Marcos + Ignacio", cuenta: "OPERACIÓN (SALARIOS Y GASTOS FIJOS)", categoria: "SALARIOS",      monto: 11219.52, txs: 1, detalle: "Avance salario agosto Marcos (05/08)" },
@@ -1476,7 +1481,7 @@ const DATA = {
   },
 
   clientes_recurrentes: [
-    { id:"hima",          nombre:"Hima",                    servicio:"Marketing",       vendor:"Hima",          mensualidad: 54520,  activo:true },
+    { id:"hima",          nombre:"Hima",                    servicio:"Marketing + CRM", vendor:"Hima",          mensualidad: 42920,  activo:true, nota:"MKT $30k + CRM $7k + IVA $5,920 = $42,920 (cuota nueva desde agosto)" },
     { id:"rafael-mkt",    nombre:"Dr. Rafael · MKT",        servicio:"Marketing",       vendor:"Dr. Rafael",    categoria:"Estrategia MKT",         mensualidad:  7064.40,  activo:true },
     { id:"rafael-ia",     nombre:"Dr. Rafael · IA",         servicio:"Setup → Mensualidad",  vendor:"Dr. Rafael",    categoria:"Licencia mensual", mensualidad: 4640.00, activo:true,
       plan_implementacion: { "abril": 5000.00, "mayo": 11600.00, "junio": 17400.00 },
